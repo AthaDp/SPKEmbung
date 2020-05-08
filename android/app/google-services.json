@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "206712001624",
+    "firebase_url": "https://programta2-3c66e.firebaseio.com",
+    "project_id": "programta2-3c66e",
+    "storage_bucket": "programta2-3c66e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206712001624:android:f2089b585bcb20fd29262d",
+        "android_client_info": {
+          "package_name": "com.example.spkembung2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206712001624-9qv1mijjkmfeopu1h0cedtr1gbr46pge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKEJTJpvdrmjmkNBVDHVUpw_yCmfLWvGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206712001624-9qv1mijjkmfeopu1h0cedtr1gbr46pge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206712001624:android:43d7fa318a0ad20629262d",
+        "android_client_info": {
+          "package_name": "com.tugasakhir.spkembung"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206712001624-9qv1mijjkmfeopu1h0cedtr1gbr46pge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKEJTJpvdrmjmkNBVDHVUpw_yCmfLWvGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206712001624-9qv1mijjkmfeopu1h0cedtr1gbr46pge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
