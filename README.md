@@ -1,2 +1,2 @@
 # SPKEmbung
- Source Code app SPK Embung Rena
+ Source Code Aplikasi Sistem Penentu Keputusan (SPK) / Decision Support System (DCS) Embung
