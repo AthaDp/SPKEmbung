@@ -36,7 +36,7 @@ class _PeringkatPageState extends State<PeringkatPage> {
 
     QuerySnapshot getAlt = await firestore
         .collection("alternatif")
-        .orderBy("preferensi")
+        .orderBy("preferensi", descending: true)
         .getDocuments();
 
     return getAlt.documents;

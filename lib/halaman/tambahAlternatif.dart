@@ -28,8 +28,13 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
   final Firestore firestore = Firestore.instance;
   //final AppColor appColor = Color(0xFF21BFBD);
   final TextEditingController controllerName = TextEditingController();
-  final TextEditingController controllerDescription = TextEditingController();
-  final TextEditingController controllerDate = TextEditingController();
+
+  final TextEditingController controllerK0 = TextEditingController();
+
+  final TextEditingController controllerK1 = TextEditingController();
+    final TextEditingController controllerK2 = TextEditingController();
+      final TextEditingController controllerK3 = TextEditingController();
+        final TextEditingController controllerK4 = TextEditingController();
 
   double widthScreen;
   double heightScreen;
@@ -40,9 +45,9 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
   void initState() {
     if (widget.isEdit) {
       //date = DateFormat('dd MMMM yyyy').parse(widget.date);
-      controllerName.text = widget.name;
-      controllerDescription.text = widget.description;
-      controllerDate.text = widget.date;
+      // controllerName.text = widget.name;
+      // controllerDescription.text = widget.description;
+      // controllerK1.text = widget.date;
     } else {
       //controllerDate.text = DateFormat('dd MMMM yyyy').format(date);
     }
@@ -141,7 +146,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
         child: Column(
           children: <Widget>[
             TextField(
-              controller: controllerDescription,
+              controller: controllerK0,
               decoration: InputDecoration(
                 labelText: 'K1',
                 suffixIcon: Column(
@@ -154,7 +159,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               style: TextStyle(fontSize: 18.0),
             ),
             TextField(
-              controller: controllerDescription,
+              controller: controllerK1,
               decoration: InputDecoration(
                 labelText: 'K2',
                 suffixIcon: Column(
@@ -167,7 +172,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               style: TextStyle(fontSize: 18.0),
             ),
             TextField(
-              controller: controllerDescription,
+              controller: controllerK2,
               decoration: InputDecoration(
                 labelText: 'K3',
                 suffixIcon: Column(
@@ -180,7 +185,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               style: TextStyle(fontSize: 18.0),
             ),
             TextField(
-              controller: controllerDescription,
+              controller: controllerK3,
               decoration: InputDecoration(
                 labelText: 'K4',
                 suffixIcon: Column(
@@ -193,7 +198,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               style: TextStyle(fontSize: 18.0),
             ),
             TextField(
-              controller: controllerDescription,
+              controller: controllerK4,
               decoration: InputDecoration(
                 labelText: 'K5',
                 suffixIcon: Column(
@@ -246,51 +251,80 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: RaisedButton(
-        //color: appColor.colorTertiary,
-        child: Text(widget.isEdit ? 'UPDATE TASK' : 'CREATE TASK'),
+        color: Color(0xFF21BFBD),
+        child: Text(widget.isEdit ? 'PERBARUI ALTERNATIF' : 'TAMBAH ALTERNATIF'),
         textColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0),
         ),
         onPressed: () async {
           String name = controllerName.text;
-          String description = controllerDescription.text;
-          String date = controllerDate.text;
+          String k1 = controllerK0.text;
+          String k2 = controllerK1.text;
+          String k3 = controllerK2.text;
+          String k4 = controllerK3.text;
+          String k5 = controllerK4.text;
+          //String date = controllerDate.text;
           if (name.isEmpty) {
-            _showSnackBarMessage('Nama harus diisi');
+            _showSnackBarMessage('Nama harus diisi!');
             return;
-          } else if (description.isEmpty) {
-            _showSnackBarMessage('Description is required');
+          } else if (k1.isEmpty) {
+            _showSnackBarMessage('Nilai Kriteria 1 harus diisi!');
+            return;
+          } else if (k2.isEmpty) {
+            _showSnackBarMessage('Nilai Kriteria 2 harus diisi!');
+            return;
+          } else if (k3.isEmpty) {
+            _showSnackBarMessage('Nilai Kriteria 3 harus diisi!');
+            return;
+          } else if (k4.isEmpty) {
+            _showSnackBarMessage('Nilai Kriteria 4 harus diisi!');
+            return;
+          } else if (k5.isEmpty) {
+            _showSnackBarMessage('Nilai Kriteria 5 harus diisi!');
             return;
           }
           setState(() => isLoading = true);
           if (widget.isEdit) {
-            DocumentReference documentTask = firestore.document('tasks/${widget.documentId}');
-            firestore.runTransaction((transaction) async {
-              DocumentSnapshot task = await transaction.get(documentTask);
-              if (task.exists) {
-                await transaction.update(
-                  documentTask,
-                  <String, dynamic>{
-                    'name': name,
-                    'description': description,
-                    'date': date,
-                  },
-                );
-                Navigator.pop(context, true);
-              }
-            });
-          } else {
-            CollectionReference tasks = firestore.collection('tasks');
-            DocumentReference result = await tasks.add(<String, dynamic>{
-              'name': name,
-              'description': description,
-              'date': date,
-            });
-            if (result.documentID != null) {
-              Navigator.pop(context, true);
-            }
+            //
+          }else {
+            // CollectionReference tasks = firestore.collection('tasks');
+            // DocumentReference result = await tasks.add(<String, dynamic>{
+            //   'name': name,
+            //   'description': description,
+            //   'date': date,
+            // });
+            // if (result.documentID != null) {
+            //   Navigator.pop(context, true);
+            // }
           }
+          // if (widget.isEdit) {
+          //   DocumentReference documentTask = firestore.document('tasks/${widget.documentId}');
+          //   firestore.runTransaction((transaction) async {
+          //     DocumentSnapshot task = await transaction.get(documentTask);
+          //     if (task.exists) {
+          //       await transaction.update(
+          //         documentTask,
+          //         <String, dynamic>{
+          //           'name': name,
+          //           'description': description,
+          //           'date': date,
+          //         },
+          //       );
+          //       Navigator.pop(context, true);
+          //     }
+          //   });
+          // } else {
+          //   CollectionReference tasks = firestore.collection('tasks');
+          //   DocumentReference result = await tasks.add(<String, dynamic>{
+          //     'name': name,
+          //     'description': description,
+          //     'date': date,
+          //   });
+          //   if (result.documentID != null) {
+          //     Navigator.pop(context, true);
+          //   }
+          //}
         },
       ),
     );

@@ -4,6 +4,7 @@ import 'package:spkembung2/services/authentication.dart';
 import 'package:spkembung2/widgets/drawer.dart';
 
 import 'package:spkembung2/halaman/normalisasi.dart';
+import 'package:spkembung2/halaman/preferensi.dart';
 
 class HitungPage extends StatefulWidget {
   HitungPage({Key key, this.auth, this.userId, this.logoutCallback})
@@ -85,7 +86,12 @@ class _HitungPageState extends State<HitungPage> {
         child: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: new InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PreferensiPage()),
+              );
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -169,11 +175,7 @@ class _HitungPageState extends State<HitungPage> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        //onPressed: _showDialog,
-        tooltip: 'Add',
-        child: Icon(Icons.add),
-      ),
+      
     );
   }
 }

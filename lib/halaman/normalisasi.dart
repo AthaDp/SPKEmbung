@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spkembung2/services/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tex/flutter_tex.dart';
+import 'dart:math';
 
 class NormalisasiPage extends StatefulWidget {
   NormalisasiPage({this.auth, this.loginCallback});
@@ -34,6 +35,7 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
     _errorMessage = "";
     _isLoading = false;
     _isLoginForm = true;
+    getFire();
     super.initState();
   }
 
@@ -54,6 +56,42 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
 
     return getAlt.documents;
   }
+
+    Future getPreferensi() async {
+    QuerySnapshot getAlt = await firestore
+        .collection("preferensi")
+        .orderBy("id")
+        .getDocuments();
+
+    return getAlt.documents;
+  }
+
+  getFire() async {
+    List<double> content = [];
+    QuerySnapshot getAlt = await firestore.collection("kriteria").orderBy("kode_kriteria").getDocuments();
+    int panjang = getAlt.documents[0].data["prioritasKriteria"].length;
+    for(int x = 0; x < panjang; x++){
+    prioritas = getAlt.documents[x]["prioritasKriteria"].cast<int>();
+    for (int i = 0; i < panjang; i++){
+      if (getAlt.documents[x]["keterangan"] == "Keuntungan") {
+        content.add(prioritas[i] / prioritas.reduce(max));
+      } else {
+        content.add(prioritas.reduce(min) / prioritas[i]); //biaya
+      }
+    }
+    print(content);
+    await firestore.collection("preferensi").document("preferensi"+x.toString()).setData({  
+      'preferensi': content,
+      'id': x,
+    }, merge: true).then((documentReference) {
+      //print(documentReference.documentID);
+    }).catchError((e) {
+      print(e);
+    });
+    content.clear();
+    } //for
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +157,7 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                   ),
                   child: FutureBuilder(
                       //future: getPosts(),
-                      future: Future.wait([getAlternatif(), getKriteria()]),
+                      future: Future.wait([getAlternatif(), getKriteria(), getPreferensi()]),
                       builder: (_, AsyncSnapshot<List> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
@@ -132,20 +170,22 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                 i += 1)
                               i
                           ];
-                          List<int> max = new List<int>();
+                          List<int> maks = new List<int>();
+
+
 
                           getmax(int a) {
-                            max = List.from(
+                            maks = List.from(
                                 snapshot.data[1][a]["prioritasKriteria"]);
-                            max.sort();
-                            return max.last;
+                            //max.sort();                          
+                            return maks.reduce(max);;
                           }
 
                           getmin(int a) {
-                            max = List.from(
+                            maks = List.from(
                                 snapshot.data[1][a]["prioritasKriteria"]);
-                            max.sort();
-                            return max.first;
+                            //maks.sort();
+                            return maks.reduce(min);
                           }
 
                           return ListView.builder(
@@ -153,7 +193,6 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                   top: 20, bottom: 10, right: 10, left: 10),
                               itemCount: snapshot.data[0].length,
                               itemBuilder: (_, index) {
-                                
                                 var keuntungan = [
                                   new Padding(
                                     padding: const EdgeInsets.only(top: 8.0),
@@ -180,7 +219,10 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                         (snapshot.data[1][index].data[
                                                     "prioritasKriteria"][i] /
                                                 getmax(index))
-                                            .toString()),
+                                            .toStringAsFixed(2)),
+                                  //print("hello ini keuntungan"),
+                                  // for (var x in list)
+                                  //   add(x, [1,2,3]),
                                   new Divider(),
                                 ];
 
@@ -210,7 +252,7 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                         (getmin(index) /
                                                 snapshot.data[1][index].data[
                                                     "prioritasKriteria"][i])
-                                            .toString()),
+                                            .toStringAsFixed(2)),
                                   new Divider(),
                                 ];
 

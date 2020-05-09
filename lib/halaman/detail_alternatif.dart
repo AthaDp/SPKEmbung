@@ -137,8 +137,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                             subtitle: new Row(
                               children: <Widget>[
                                 Text(snapshot.data[index].data["alternatif"]
-                                        [widget.id]
-                                    ),
+                                    [widget.id]),
                               ],
                             ),
                             isThreeLine: false,

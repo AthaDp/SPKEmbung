@@ -107,11 +107,11 @@ class _HomePageState extends State<KriteriaPage> {
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text("Keterangan: " +
-                              alternatif["keterangan"] //+
-                              //", Bobot: " +
-                              //alternatif["bobot_kriteria"].toString()
-                              ),
+                          subtitle:
+                              Text("Keterangan: " + alternatif["keterangan"] //+
+                                  //", Bobot: " +
+                                  //alternatif["bobot_kriteria"].toString()
+                                  ),
                           isThreeLine: false,
                           leading: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -142,12 +142,11 @@ class _HomePageState extends State<KriteriaPage> {
               ))
         ],
       ),
-      
-      floatingActionButton: FloatingActionButton(
-        //onPressed: _showDialog,
-        tooltip: 'Tambah Kriteria Baru',
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   //onPressed: _showDialog,
+      //   tooltip: 'Tambah Kriteria Baru',
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 }
