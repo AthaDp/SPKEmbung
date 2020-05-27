@@ -66,20 +66,31 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
     return getAlt.documents;
   }
 
+
+  
   getFire() async {
     List<double> content = [];
-    QuerySnapshot getAlt = await firestore.collection("kriteria").orderBy("kode_kriteria").getDocuments();
-    int panjang = getAlt.documents[0].data["prioritasKriteria"].length;
+    QuerySnapshot getAlt = await firestore.collection("alternatif").orderBy("kode_alternatif").getDocuments();
+    QuerySnapshot getKri = await firestore.collection("kriteria").orderBy("kode_kriteria").getDocuments();
+    int panjang = 5;
+    //int panjang = getAlt.documents[0].data["prioritasKriteria"].length;
     for(int x = 0; x < panjang; x++){
-    prioritas = getAlt.documents[x]["prioritasKriteria"].cast<int>();
     for (int i = 0; i < panjang; i++){
-      if (getAlt.documents[x]["keterangan"] == "Keuntungan") {
-        content.add(prioritas[i] / prioritas.reduce(max));
+      prioritas.add(getAlt.documents[i]["prioritas"][x]);
+    }
+    print("prioritas :" + prioritas.toString());
+    for(int y = 0; y<panjang; y++){
+      if (getKri.documents[x]["keterangan"] == "Keuntungan") {
+        content.add(prioritas[y] / prioritas.reduce(max));
       } else {
-        content.add(prioritas.reduce(min) / prioritas[i]); //biaya
+        content.add(prioritas.reduce(min) / prioritas[y]); //biaya
       }
     }
     print(content);
+    print("max" + prioritas.reduce(max).toString());
+    print("run " + x.toString());
+ 
+    prioritas.clear();
     await firestore.collection("preferensi").document("preferensi"+x.toString()).setData({  
       'preferensi': content,
       'id': x,
@@ -91,6 +102,34 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
     content.clear();
     } //for
   }
+
+  
+  // getFire() async {
+  //   List<double> content = [];
+  //   QuerySnapshot getAlt = await firestore.collection("kriteria").orderBy("kode_kriteria").getDocuments();
+  //   int panjang = 5;
+  //   //int panjang = getAlt.documents[0].data["prioritasKriteria"].length;
+  //   for(int x = 0; x < panjang; x++){
+  //   prioritas = getAlt.documents[x]["prioritasKriteria"].cast<int>();
+  //   for (int i = 0; i < panjang; i++){
+  //     if (getAlt.documents[x]["keterangan"] == "Keuntungan") {
+  //       content.add(prioritas[i] / prioritas.reduce(max));
+  //     } else {
+  //       content.add(prioritas.reduce(min) / prioritas[i]); //biaya
+  //     }
+  //   }
+  //   print(content);
+  //   await firestore.collection("preferensi").document("preferensi"+x.toString()).setData({  
+  //     'preferensi': content,
+  //     'id': x,
+  //   }, merge: true).then((documentReference) {
+  //     //print(documentReference.documentID);
+  //   }).catchError((e) {
+  //     print(e);
+  //   });
+  //   content.clear();
+  //   } //for
+  // }
 
 
   @override
@@ -165,33 +204,65 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                           var list = [
                             for (var i = 0;
                                 i <
-                                    snapshot.data[1][1]
-                                        .data["prioritasKriteria"].length;
+                                    snapshot.data[0].length;
                                 i += 1)
                               i
                           ];
                           List<int> maks = new List<int>();
 
-
-
                           getmax(int a) {
-                            maks = List.from(
-                                snapshot.data[1][a]["prioritasKriteria"]);
+                            List<int> prioritas = [];
+                            int panjang = snapshot.data[0][0]["prioritas"].length;
+                            for(int x = 0; x < panjang; x++){
+                              int isiPrioritas = snapshot.data[0][x]["prioritas"][a];
+                              prioritas.add(snapshot.data[0][x]["prioritas"][a]);
+                              
+                              //print("isi prioritas : " + isiPrioritas.toString());
+                            }
+                            //print(prioritas.reduce(max));
+                            // maks = List.from(
+                            //      snapshot.data[1][a]["prioritasKriteria"]);                                 
+                          //   //max.sort();
+                            // maks = List.from(
+                            //     snapshot.data[0][a]["prioritas"]);
                             //max.sort();                          
-                            return maks.reduce(max);;
+                            //return maks.reduce(max);
+                            //print("isi prioritas : " + isiPrioritas.toString());
+                            return prioritas.reduce(max);
                           }
 
+                          // getmax(int a) {
+                          //   maks = List.from(
+                          //       snapshot.data[0][a]["prioritas"]);
+                          //   //max.sort();                          
+                          //   return maks.reduce(max);
+
+                          // }
+
                           getmin(int a) {
+                            List<int> prioritas = [];
+                            int panjang = snapshot.data[0][0]["prioritas"].length;
+                            for(int x=0; x < panjang; x++){
+                              int isiPrioritas = snapshot.data[0][x]["prioritas"][a];
+                              prioritas.add(snapshot.data[0][x]["prioritas"][a]);
+                            }
                             maks = List.from(
                                 snapshot.data[1][a]["prioritasKriteria"]);
                             //maks.sort();
-                            return maks.reduce(min);
+                            return prioritas.reduce(min);
                           }
+
+                          // getmin(int a) {
+                          //   maks = List.from(
+                          //       snapshot.data[1][a]["prioritasKriteria"]);
+                          //   //maks.sort();
+                          //   return maks.reduce(min);
+                          // }
 
                           return ListView.builder(
                               padding: const EdgeInsets.only(
                                   top: 20, bottom: 10, right: 10, left: 10),
-                              itemCount: snapshot.data[0].length,
+                              itemCount: 5,
                               itemBuilder: (_, index) {
                                 var keuntungan = [
                                   new Padding(
@@ -210,15 +281,15 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                     new Text("Alternatif " +
                                         (i + 1).toString() +
                                         ": " +
-                                        snapshot.data[1][index]
-                                            .data["prioritasKriteria"][i]
+                                        snapshot.data[0][i]
+                                            .data["prioritas"][index]
                                             .toString() +
                                         " / " +
                                         getmax(index).toString() +
                                         " = " +
-                                        (snapshot.data[1][index].data[
-                                                    "prioritasKriteria"][i] /
-                                                getmax(index))
+                                        (snapshot.data[0][i].data[
+                                                    "prioritas"][index] /
+                                                (getmax(index)))
                                             .toStringAsFixed(2)),
                                   //print("hello ini keuntungan"),
                                   // for (var x in list)
@@ -245,13 +316,13 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                         ": " +
                                         getmin(index).toString() +
                                         " / " +
-                                        snapshot.data[1][index]
-                                            .data["prioritasKriteria"][i]
+                                        snapshot.data[0][i]
+                                            .data["prioritas"][index]
                                             .toString() +
                                         " = " +
                                         (getmin(index) /
-                                                snapshot.data[1][index].data[
-                                                    "prioritasKriteria"][i])
+                                                snapshot.data[0][i].data[
+                                                    "prioritas"][index])
                                             .toStringAsFixed(2)),
                                   new Divider(),
                                 ];

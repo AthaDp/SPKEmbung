@@ -170,12 +170,12 @@ class _AlternatifPageState extends State<AlternatifPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => TambahAlternatif(isEdit: false)));
-          if (result != null && result) {
-            scaffoldState.currentState.showSnackBar(SnackBar(
-              content: Text('Task has been created'),
-            ));
-            setState(() {});
-          }
+          // if (result != null && result) {
+          //   scaffoldState.currentState.showSnackBar(SnackBar(
+          //     content: Text('Task has been created'),
+          //   ));
+          //   setState(() {});
+          // }
         },
         //onPressed: () => addAlternatif(),
         tooltip: 'Tambah Kriteria Baru',

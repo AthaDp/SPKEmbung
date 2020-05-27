@@ -33,6 +33,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
     //_getName();
     super.initState();
   }
+  var firestore = Firestore.instance;
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   var list;
@@ -59,6 +60,16 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
         await firestore.collection("kriteria").orderBy("id").getDocuments();
 
     return getKri.documents;
+  }
+
+  
+  Future getAlternatif() async {
+    QuerySnapshot getAlt = await firestore
+        .collection("alternatif")
+        .orderBy("kode_alternatif")
+        .getDocuments();
+
+    return getAlt.documents;
   }
 
   Future<Null> refreshList() async {
@@ -109,7 +120,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(50.0)),
               ),
               child: FutureBuilder(
-                future: getPosts(),
+                future: Future.wait([getPosts(),getAlternatif()]),
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -119,7 +130,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                     return ListView.builder(
                       padding: const EdgeInsets.only(
                           top: 20, bottom: 10, right: 10, left: 10),
-                      itemCount: snapshot.data.length,
+                      itemCount: snapshot.data[0].length,
                       itemBuilder: (_, index) {
                         return Card(
                           margin: new EdgeInsets.symmetric(
@@ -129,15 +140,16 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                               borderRadius: BorderRadius.circular(50.0)),
                           child: ListTile(
                             title: Text(
-                              snapshot.data[index].data["nama_kriteria"],
+                              snapshot.data[0][index].data["nama_kriteria"],
                               //widget.post.data["nama_kriteria"],
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             subtitle: new Row(
                               children: <Widget>[
-                                Text(snapshot.data[index].data["alternatif"]
-                                    [widget.id]),
+                                Text(snapshot.data[1][widget.id].data["kriteria"]
+                                    [index].toString() + ", Nilai Prioritas: " + snapshot.data[1][widget.id].data["prioritas"]
+                                    [index].toString()),
                               ],
                             ),
                             isThreeLine: false,
@@ -153,7 +165,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                                   ),
                                   child: Center(
                                       child: Text(
-                                    snapshot.data[index].data["kode_kriteria"],
+                                    snapshot.data[0][index].data["kode_kriteria"],
                                     //kriteria['kode_kriteria'],
                                     style: TextStyle(
                                         color: Colors.white,

@@ -53,7 +53,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
                                                     "bobot_kriteria"]).toDouble());
     }
     hasil.add(content[x]);
-    print(hasil);
+    //print(hasil);
     content.clear();
     }
     await firestore.collection("preferensi").document("preferensi"+a.toString()).setData({  
