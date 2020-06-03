@@ -39,36 +39,59 @@ class _PreferensiPageState extends State<PreferensiPage> {
 
   getFire() async {
     List<double> content = [];
+    List<double> contentPref = [];
+    List<double> bobot = [];
     List<double> hasil = [];
-    List<double> kriteria = [];
-    List<double> preferensi = [];
-    QuerySnapshot getKri = await firestore.collection("kriteria").orderBy("kode_kriteria").getDocuments();
-    QuerySnapshot getPref = await firestore.collection("preferensi").orderBy("id").getDocuments();
-    int panjang = getKri.documents[0].data["prioritasKriteria"].length;
-    for (int a =0; a < panjang; a++){
-    for(int x = 0; x < panjang; x++){
-    double prioritas = getPref.documents[x]["preferensi"][a];
-    for (int i = 0; i < panjang; i++){
-        content.add(prioritas * (getKri.documents[i].data[
-                                                    "bobot_kriteria"]).toDouble());
+    QuerySnapshot getKri = await firestore
+        .collection("kriteria")
+        .orderBy("kode_kriteria")
+        .getDocuments();
+    QuerySnapshot getAlt = await firestore
+        .collection("alternatif")
+        .orderBy("kode_alternatif")
+        .getDocuments();
+    QuerySnapshot getPref =
+        await firestore
+        .collection("preferensi")
+        .orderBy("id")
+        .getDocuments();
+    int panjang = getAlt.documents.length; //panjang Kriteria
+    int iterate = 5;
+    for (int v = 0; v < 5; v++) {
+      bobot.add((getKri.documents[v].data["bobot_kriteria"]).toDouble());
     }
-    hasil.add(content[x]);
-    //print(hasil);
-    content.clear();
-    }
-    await firestore.collection("preferensi").document("preferensi"+a.toString()).setData({  
-      'hitung': hasil,
-    }, merge: true).then((documentReference) {
-    }).catchError((e) {
-      print(e);
-    });
-    await firestore.collection("alternatif").document("Alternatif"+(a+1).toString()).setData({  
-      'preferensi': hasil.fold(0,(i,j) => i+j).toStringAsFixed(2),
-    }, merge: true).then((documentReference) {
-    }).catchError((e) {
-      print(e);
-    });
-    hasil.clear();
+    print("bobot : " + bobot.toString());
+    for (int a = 0; a < panjang; a++) {
+        for(int b = 0; b < iterate; b++){
+          content.add(getPref.documents[b]["preferensi"][a]);
+        }
+        for (int c = 0; c < 5; c++) {
+          hasil.add(content[c] * bobot[c]);
+        }
+      content.clear();
+      contentPref.clear();
+
+      await firestore
+          .collection("preferensi")
+          .document("preferensi" + a.toString())
+          .setData({
+            'hitung': hasil,
+          }, merge: true)
+          .then((documentReference) {})
+          .catchError((e) {
+            print(e);
+          });
+      await firestore
+          .collection("alternatif")
+          .document("Alternatif" + (a + 1).toString())
+          .setData({
+            'preferensi': hasil.fold(0, (i, j) => i + j).toStringAsFixed(2),
+          }, merge: true)
+          .then((documentReference) {})
+          .catchError((e) {
+            print(e);
+          });
+      hasil.clear();
     }
   }
 
@@ -82,10 +105,8 @@ class _PreferensiPageState extends State<PreferensiPage> {
   }
 
   Future getPreferensi() async {
-    QuerySnapshot getAlt = await firestore
-        .collection("preferensi")
-        .orderBy("id")
-        .getDocuments();
+    QuerySnapshot getAlt =
+        await firestore.collection("preferensi").orderBy("id").getDocuments();
 
     return getAlt.documents;
   }
@@ -149,19 +170,13 @@ class _PreferensiPageState extends State<PreferensiPage> {
                   ),
                   child: FutureBuilder(
                       //future: getPosts(),
-                      future: Future.wait([getAlternatif(), getKriteria(), getPreferensi()]),
+                      future: Future.wait(
+                          [getAlternatif(), getKriteria(), getPreferensi()]),
                       builder: (_, AsyncSnapshot<List> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
                         } else {
-                          var list = [
-                            for (var i = 0;
-                                i <
-                                    snapshot.data[1][1]
-                                        .data["prioritasKriteria"].length;
-                                i += 1)
-                              i
-                          ];
+                          var list = [for (var i = 0; i < 5; i += 1) i];
                           List<int> max = new List<int>();
 
                           getmax(int a) {
@@ -183,16 +198,16 @@ class _PreferensiPageState extends State<PreferensiPage> {
                                   top: 20, bottom: 10, right: 10, left: 10),
                               itemCount: snapshot.data[0].length,
                               itemBuilder: (_, index) {
-
                                 return Card(
                                   margin: new EdgeInsets.symmetric(
                                       horizontal: 10.0, vertical: 8.0),
                                   elevation: 4.0,
                                   child: ListTile(
                                       title: Text(
-                                        "Preferensi " +
+                                        "Preferensi A" +
                                             snapshot.data[0][index]
-                                                .data["kode_alternatif"] +
+                                                .data["kode_alternatif"]
+                                                .toString() +
                                             ". " +
                                             snapshot.data[0][index]
                                                 .data["nama_alternatif"],
@@ -208,20 +223,41 @@ class _PreferensiPageState extends State<PreferensiPage> {
                                           new Divider(),
                                           new Text("Pa = ("),
                                           for (var i in list)
-                                          new Column (children: [
-                                            new Text(snapshot.data[2][i].data[
-                                                    "preferensi"][index].toStringAsFixed(2) + " x " +
-                                                    snapshot.data[1][i].data[
-                                                    "bobot_kriteria"].toString() + " = " +
+                                            new Column(
+                                              children: [
+                                                new Text(snapshot
+                                                        .data[2][i]
+                                                        .data["preferensi"]
+                                                            [index]
+                                                        .toStringAsFixed(2) +
+                                                    " X " +
+                                                    snapshot.data[1][i]
+                                                        .data["bobot_kriteria"]
+                                                        .toString() +
+                                                    " = " +
                                                     ((snapshot.data[2][i].data[
-                                                    "preferensi"][index]).toDouble() * (snapshot.data[1][i].data[
-                                                    "bobot_kriteria"]).toDouble()).toStringAsFixed(2)
+                                                                        "preferensi"]
+                                                                    [index])
+                                                                .toDouble() *
+                                                            (snapshot.data[1][i]
+                                                                        .data[
+                                                                    "bobot_kriteria"])
+                                                                .toDouble())
+                                                        .toStringAsFixed(2))
+                                                        
+                                                // new Text(snapshot.data[2][i].data[
+                                                //         "preferensi"][index].toStringAsFixed(2) + " x " +
+                                                //         snapshot.data[1][i].data[
+                                                //         "bobot_kriteria"].toString() + " = " +
+                                                //         ((snapshot.data[2][i].data[
+                                                //         "preferensi"][index]).toDouble() * (snapshot.data[1][i].data[
+                                                //         "bobot_kriteria"]).toDouble()).toStringAsFixed(2)
+                                                // ),
+                                              ],
                                             ),
-                                          ],),
-                                          new Text(") = " + snapshot.data[2][index].data["hitung"].fold(0,(i,j) => i+j).toStringAsFixed(2)),
+                                          //new Text(") = " + snapshot.data[2][index].data["hitung"].fold(0,(i,j) => i+j).toStringAsFixed(2)),
                                           new Divider(),
                                         ],
-                                        
                                       ),
                                       onTap: () => null),
                                 );

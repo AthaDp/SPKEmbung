@@ -33,6 +33,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
     //_getName();
     super.initState();
   }
+
   var firestore = Firestore.instance;
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -62,7 +63,6 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
     return getKri.documents;
   }
 
-  
   Future getAlternatif() async {
     QuerySnapshot getAlt = await firestore
         .collection("alternatif")
@@ -98,7 +98,8 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
             child: Row(
               children: <Widget>[
                 Text(
-                    widget.post.data["kode_alternatif"] +
+                    "A" +
+                        widget.post.data["kode_alternatif"].toString() +
                         ". " +
                         widget.post.data["nama_alternatif"],
                     style: TextStyle(
@@ -120,7 +121,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(50.0)),
               ),
               child: FutureBuilder(
-                future: Future.wait([getPosts(),getAlternatif()]),
+                future: Future.wait([getPosts(), getAlternatif()]),
                 builder: (_, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -147,9 +148,13 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                             ),
                             subtitle: new Row(
                               children: <Widget>[
-                                Text(snapshot.data[1][widget.id].data["kriteria"]
-                                    [index].toString() + ", Nilai Prioritas: " + snapshot.data[1][widget.id].data["prioritas"]
-                                    [index].toString()),
+                                Text(snapshot.data[1][widget.id]
+                                        .data["kriteria"][index]
+                                        .toString() +
+                                    ", Nilai Prioritas: " +
+                                    snapshot.data[1][widget.id]
+                                        .data["prioritas"][index]
+                                        .toString()),
                               ],
                             ),
                             isThreeLine: false,
@@ -165,7 +170,8 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                                   ),
                                   child: Center(
                                       child: Text(
-                                    snapshot.data[0][index].data["kode_kriteria"],
+                                    snapshot
+                                        .data[0][index].data["kode_kriteria"],
                                     //kriteria['kode_kriteria'],
                                     style: TextStyle(
                                         color: Colors.white,

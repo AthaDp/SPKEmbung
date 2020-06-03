@@ -57,80 +57,55 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
     return getAlt.documents;
   }
 
-    Future getPreferensi() async {
-    QuerySnapshot getAlt = await firestore
-        .collection("preferensi")
-        .orderBy("id")
-        .getDocuments();
+  Future getPreferensi() async {
+    QuerySnapshot getAlt =
+        await firestore.collection("preferensi").orderBy("id").getDocuments();
 
     return getAlt.documents;
   }
 
-
-  
   getFire() async {
     List<double> content = [];
-    QuerySnapshot getAlt = await firestore.collection("alternatif").orderBy("kode_alternatif").getDocuments();
-    QuerySnapshot getKri = await firestore.collection("kriteria").orderBy("kode_kriteria").getDocuments();
-    int panjang = 5;
-    //int panjang = getAlt.documents[0].data["prioritasKriteria"].length;
-    for(int x = 0; x < panjang; x++){
-    for (int i = 0; i < panjang; i++){
-      prioritas.add(getAlt.documents[i]["prioritas"][x]);
-    }
-    print("prioritas :" + prioritas.toString());
-    for(int y = 0; y<panjang; y++){
-      if (getKri.documents[x]["keterangan"] == "Keuntungan") {
-        content.add(prioritas[y] / prioritas.reduce(max));
-      } else {
-        content.add(prioritas.reduce(min) / prioritas[y]); //biaya
+    QuerySnapshot getAlt = await firestore
+        .collection("alternatif")
+        .orderBy("kode_alternatif")
+        .getDocuments();
+    QuerySnapshot getKri = await firestore
+        .collection("kriteria")
+        .orderBy("kode_kriteria")
+        .getDocuments();
+    int panjang = getAlt.documents.length;
+    int preferensi = 0;
+    for (int a = 0; a < 5; a++) {
+      for (int b = 0; b < panjang; b++) {
+        prioritas.add(getAlt.documents[b]["prioritas"][a]);
       }
+      print("prioritas :" + prioritas.toString());
+      for (int c = 0; c < panjang; c++) {
+        if (getKri.documents[a]["keterangan"] == "Keuntungan") {
+          content.add(prioritas[c] / prioritas.reduce(max));
+        } else {
+          content.add(prioritas.reduce(min) / prioritas[c]);
+        }
+      }
+      print(content);
+      await firestore
+          .collection("preferensi")
+          .document("preferensi" + preferensi.toString())
+          .setData({
+        'preferensi': content,
+        'id': preferensi,
+      }, merge: true).then((documentReference) {
+        //print(documentReference.documentID);
+      }).catchError((e) {
+        print(e);
+      });
+      content.clear();
+      prioritas.clear();
+      preferensi++;
     }
-    print(content);
-    print("max" + prioritas.reduce(max).toString());
-    print("run " + x.toString());
- 
-    prioritas.clear();
-    await firestore.collection("preferensi").document("preferensi"+x.toString()).setData({  
-      'preferensi': content,
-      'id': x,
-    }, merge: true).then((documentReference) {
-      //print(documentReference.documentID);
-    }).catchError((e) {
-      print(e);
-    });
     content.clear();
-    } //for
   }
-
-  
-  // getFire() async {
-  //   List<double> content = [];
-  //   QuerySnapshot getAlt = await firestore.collection("kriteria").orderBy("kode_kriteria").getDocuments();
-  //   int panjang = 5;
-  //   //int panjang = getAlt.documents[0].data["prioritasKriteria"].length;
-  //   for(int x = 0; x < panjang; x++){
-  //   prioritas = getAlt.documents[x]["prioritasKriteria"].cast<int>();
-  //   for (int i = 0; i < panjang; i++){
-  //     if (getAlt.documents[x]["keterangan"] == "Keuntungan") {
-  //       content.add(prioritas[i] / prioritas.reduce(max));
-  //     } else {
-  //       content.add(prioritas.reduce(min) / prioritas[i]); //biaya
-  //     }
-  //   }
-  //   print(content);
-  //   await firestore.collection("preferensi").document("preferensi"+x.toString()).setData({  
-  //     'preferensi': content,
-  //     'id': x,
-  //   }, merge: true).then((documentReference) {
-  //     //print(documentReference.documentID);
-  //   }).catchError((e) {
-  //     print(e);
-  //   });
-  //   content.clear();
-  //   } //for
-  // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -156,31 +131,16 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
           ),
           new Text(
             "Perhitungan Data Normalisasi Dilakukan :",
-            //style: new TextStyle(fontSize:33.0,
-            //color: const Color(0xFF21BFBD),
-            //fontWeight: FontWeight.bold,
-            //fontFamily: "Roboto"
-            //)
           ),
           new Divider(),
           new Text(
             "1. Apabila kriteria cost :",
-            //style: new TextStyle(fontSize:33.0,
-            //color: const Color(0xFF21BFBD),
-            //fontWeight: FontWeight.bold,
-            //fontFamily: "Roboto"
-            //)
           ),
           new Padding(
             padding: const EdgeInsets.only(top: 16.0),
           ),
           new Text(
             "2. Apabila kriteria benefit :",
-            //style: new TextStyle(fontSize:33.0,
-            //color: const Color(0xFF21BFBD),
-            //fontWeight: FontWeight.bold,
-            //fontFamily: "Roboto"
-            //)
           ),
           new Padding(
             padding: const EdgeInsets.only(top: 16.0),
@@ -196,68 +156,46 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                   ),
                   child: FutureBuilder(
                       //future: getPosts(),
-                      future: Future.wait([getAlternatif(), getKriteria(), getPreferensi()]),
+                      future: Future.wait(
+                          [getAlternatif(), getKriteria(), getPreferensi()]),
                       builder: (_, AsyncSnapshot<List> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
                         } else {
                           var list = [
-                            for (var i = 0;
-                                i <
-                                    snapshot.data[0].length;
-                                i += 1)
+                            for (var i = 0; i < snapshot.data[0].length; i += 1)
                               i
                           ];
                           List<int> maks = new List<int>();
 
                           getmax(int a) {
                             List<int> prioritas = [];
-                            int panjang = snapshot.data[0][0]["prioritas"].length;
-                            for(int x = 0; x < panjang; x++){
-                              int isiPrioritas = snapshot.data[0][x]["prioritas"][a];
-                              prioritas.add(snapshot.data[0][x]["prioritas"][a]);
-                              
-                              //print("isi prioritas : " + isiPrioritas.toString());
+                            int panjang =
+                                snapshot.data[0].length;
+                            for (int x = 0; x < panjang; x++) {
+                              // int isiPrioritas =
+                              //     snapshot.data[0][x]["prioritas"][a];
+                              prioritas
+                                  .add(snapshot.data[0][x]["prioritas"][a]);
                             }
-                            //print(prioritas.reduce(max));
-                            // maks = List.from(
-                            //      snapshot.data[1][a]["prioritasKriteria"]);                                 
-                          //   //max.sort();
-                            // maks = List.from(
-                            //     snapshot.data[0][a]["prioritas"]);
-                            //max.sort();                          
-                            //return maks.reduce(max);
-                            //print("isi prioritas : " + isiPrioritas.toString());
+                            print("prioritas max " + prioritas.toString());
                             return prioritas.reduce(max);
                           }
 
-                          // getmax(int a) {
-                          //   maks = List.from(
-                          //       snapshot.data[0][a]["prioritas"]);
-                          //   //max.sort();                          
-                          //   return maks.reduce(max);
-
-                          // }
-
                           getmin(int a) {
                             List<int> prioritas = [];
-                            int panjang = snapshot.data[0][0]["prioritas"].length;
-                            for(int x=0; x < panjang; x++){
-                              int isiPrioritas = snapshot.data[0][x]["prioritas"][a];
-                              prioritas.add(snapshot.data[0][x]["prioritas"][a]);
+                            int panjang =
+                                snapshot.data[0].length;
+                            for (int x = 0; x < panjang; x++) {
+                              int isiPrioritas =
+                                  snapshot.data[0][x]["prioritas"][a];
+                              prioritas
+                                  .add(snapshot.data[0][x]["prioritas"][a]);
                             }
                             maks = List.from(
                                 snapshot.data[1][a]["prioritasKriteria"]);
-                            //maks.sort();
                             return prioritas.reduce(min);
                           }
-
-                          // getmin(int a) {
-                          //   maks = List.from(
-                          //       snapshot.data[1][a]["prioritasKriteria"]);
-                          //   //maks.sort();
-                          //   return maks.reduce(min);
-                          // }
 
                           return ListView.builder(
                               padding: const EdgeInsets.only(
@@ -281,19 +219,16 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                     new Text("Alternatif " +
                                         (i + 1).toString() +
                                         ": " +
-                                        snapshot.data[0][i]
-                                            .data["prioritas"][index]
+                                        snapshot
+                                            .data[0][i].data["prioritas"][index]
                                             .toString() +
                                         " / " +
                                         getmax(index).toString() +
                                         " = " +
-                                        (snapshot.data[0][i].data[
-                                                    "prioritas"][index] /
+                                        (snapshot.data[0][i].data["prioritas"]
+                                                    [index] /
                                                 (getmax(index)))
                                             .toStringAsFixed(2)),
-                                  //print("hello ini keuntungan"),
-                                  // for (var x in list)
-                                  //   add(x, [1,2,3]),
                                   new Divider(),
                                 ];
 
@@ -316,13 +251,13 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                                         ": " +
                                         getmin(index).toString() +
                                         " / " +
-                                        snapshot.data[0][i]
-                                            .data["prioritas"][index]
+                                        snapshot
+                                            .data[0][i].data["prioritas"][index]
                                             .toString() +
                                         " = " +
                                         (getmin(index) /
-                                                snapshot.data[0][i].data[
-                                                    "prioritas"][index])
+                                                snapshot.data[0][i]
+                                                    .data["prioritas"][index])
                                             .toStringAsFixed(2)),
                                   new Divider(),
                                 ];

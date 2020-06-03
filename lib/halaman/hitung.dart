@@ -175,7 +175,6 @@ class _HitungPageState extends State<HitungPage> {
           )
         ],
       ),
-      
     );
   }
 }

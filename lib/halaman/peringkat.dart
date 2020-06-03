@@ -31,6 +31,7 @@ class _PeringkatPageState extends State<PeringkatPage> {
     super.initState();
   }
 
+
   Future getPosts() async {
     var firestore = Firestore.instance;
 
@@ -139,8 +140,10 @@ class _PeringkatPageState extends State<PeringkatPage> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            snapshot.data[index]
-                                                .data["kode_alternatif"],
+                                            "A" +
+                                                snapshot.data[index]
+                                                    .data["kode_alternatif"]
+                                                    .toString(),
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
@@ -149,8 +152,6 @@ class _PeringkatPageState extends State<PeringkatPage> {
                                         ),
                                       )
                                     ]),
-                                /*onTap: () => NavigateToDetail(
-                                      snapshot.data[index], index)*/
                               ),
                             );
                           });

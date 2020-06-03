@@ -8,8 +8,15 @@ class TambahAlternatif extends StatefulWidget {
   final bool isEdit;
   final String documentId;
   final String name;
+  final String nama;
   final String description;
   final String date;
+  final String k1;
+  final String k2;
+  final String k3;
+  final String k4;
+  final String k0;
+  final int index;
 
   TambahAlternatif({
     @required this.isEdit,
@@ -17,6 +24,13 @@ class TambahAlternatif extends StatefulWidget {
     this.name = '',
     this.description = '',
     this.date = '',
+    this.k1 = '',
+    this.k2 = '',
+    this.k3 = '',
+    this.k4 = '',
+    this.k0 = '',
+    this.nama = '',
+    this.index,
   });
 
   @override
@@ -32,15 +46,14 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
   final TextEditingController controllerK0 = TextEditingController();
 
   final TextEditingController controllerK1 = TextEditingController();
-    final TextEditingController controllerK2 = TextEditingController();
-      final TextEditingController controllerK3 = TextEditingController();
-        final TextEditingController controllerK4 = TextEditingController();
+  final TextEditingController controllerK2 = TextEditingController();
+  final TextEditingController controllerK3 = TextEditingController();
+  final TextEditingController controllerK4 = TextEditingController();
 
   double widthScreen;
   double heightScreen;
   DateTime date = DateTime.now().add(Duration(days: 1));
   bool isLoading = false;
-
 
   // List<DropdownMenuItem<int>> listDrop = [];
   // void loadData() {
@@ -66,11 +79,10 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
   //     ));
   // }
 
-  var listDrop = ['abc', 'bcd'];
-  String dropdownStr = "Movies";
   String _myList;
   String _myListResult;
   int kriteria1;
+  String alternatifValue;
 
   @override
   void initState() {
@@ -79,19 +91,43 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
     // loadData();
     // print(listDrop);
     if (widget.isEdit) {
-      //date = DateFormat('dd MMMM yyyy').parse(widget.date);
-      // controllerName.text = widget.name;
-      // controllerDescription.text = widget.description;
-      // controllerK1.text = widget.date;
-    } else {
-      //controllerDate.text = DateFormat('dd MMMM yyyy').format(date);
-    }
+      String k1 = "helloworld"; //prioritas K1
+      controllerName.text = widget.nama;
+      //kriteria1 = 1; //angka
+      if(widget.k0 == "1"){
+        alternatifValue = "one";
+        k1 = "Hutan";
+      } else if(widget.k0 == "2"){
+          alternatifValue = "two";
+          k1 = "Semak Belukar";
+          kriteria1 = 1;
+      } else if(widget.k0 == "3"){
+          alternatifValue = "three";
+          k1 = "Ladang / Tegalan";
+          kriteria1 = 2;
+      } else if(widget.k0 == "4"){
+          alternatifValue = "four";
+          k1 = "Sawah Tadah Hujan";
+          kriteria1 = 3;
+      } else if(widget.k0 == "5"){
+          alternatifValue = "five";
+          k1 = "Perkampungan";
+          kriteria1 = 4;
+      } else {
+        alternatifValue = null;
+        k1 = null;
+      }
+      controllerK1.text = widget.k1;
+      controllerK2.text = widget.k2;
+      controllerK3.text = widget.k3;
+      controllerK4.text = widget.k4;
+      //selectedDropDownValue = "normal";
+    } 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     widthScreen = mediaQueryData.size.width;
     heightScreen = mediaQueryData.size.height;
@@ -119,8 +155,8 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
                           padding: const EdgeInsets.all(16.0),
                           child: Center(
                             child: CircularProgressIndicator(
-                              //valueColor: AlwaysStoppedAnimation<Color>(appColor.colorTertiary),
-                            ),
+                                //valueColor: AlwaysStoppedAnimation<Color>(appColor.colorTertiary),
+                                ),
                           ),
                         )
                       : _buildWidgetButtonCreateTask(),
@@ -196,7 +232,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
             // ),
             DropdownButtonFormField(
               hint: Text("Pilih Kategori Vegetasi"),
-              //value: _myList,
+              value: alternatifValue,
               onChanged: (String value) {
                 if (value == 'one') {
                   setState(() {
@@ -222,24 +258,18 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
                   setState(() {
                     kriteria1 = 5;
                   });
-                } 
+                }
               },
               items: [
-              DropdownMenuItem<String>(
-              child: Text('Hutan'),
-              value: 'one'),
-              DropdownMenuItem<String>(
-              child: Text('Semak Belukar'),
-              value: 'two'),
-              DropdownMenuItem<String>(
-              child: Text('Ladang / Tegalan'),
-              value: 'three'),
-              DropdownMenuItem<String>(
-              child: Text('Tadah Hujan'),
-              value: 'four'),
-              DropdownMenuItem<String>(
-              child: Text('Perkampungan'),
-              value: 'five'),
+                DropdownMenuItem<String>(child: Text('Hutan'), value: 'one'),
+                DropdownMenuItem<String>(
+                    child: Text('Semak Belukar'), value: 'two'),
+                DropdownMenuItem<String>(
+                    child: Text('Ladang / Tegalan'), value: 'three'),
+                DropdownMenuItem<String>(
+                    child: Text('Tadah Hujan'), value: 'four'),
+                DropdownMenuItem<String>(
+                    child: Text('Perkampungan'), value: 'five'),
               ],
             ),
             TextField(
@@ -294,35 +324,8 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               ),
               style: TextStyle(fontSize: 18.0),
             ),
-            
-            SizedBox(height: 16.0),
-            /*TextField(
-              controller: controllerDate,
-              decoration: InputDecoration(
-                labelText: 'Date',
-                suffixIcon: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Icon(Icons.today),
-                  ],
-                ),
-              ),
-              style: TextStyle(fontSize: 18.0),
-              readOnly: true,
-              onTap: () async {
-                DateTime today = DateTime.now();
-                DateTime datePicker = await showDatePicker(
-                  context: context,
-                  initialDate: date,
-                  firstDate: today,
-                  lastDate: DateTime(2021),
-                );
-                if (datePicker != null) {
-                  date = datePicker;
-                  //controllerDate.text = DateFormat('dd MMMM yyyy').format(date);
-                }
-              },
-            ),*/
+
+            SizedBox(height: 16.0),      
           ],
         ),
       ),
@@ -336,7 +339,8 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: RaisedButton(
         color: Color(0xFF21BFBD),
-        child: Text(widget.isEdit ? 'PERBARUI ALTERNATIF' : 'TAMBAH ALTERNATIF'),
+        child:
+            Text(widget.isEdit ? 'PERBARUI ALTERNATIF' : 'TAMBAH ALTERNATIF'),
         textColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0),
@@ -371,109 +375,86 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
           }
 
           setState(() => isLoading = true);
-          if (widget.isEdit) {
-            //
-          }else {
+          // if (widget.isEdit) {
+          //   //
+          // } 
+          
             //print(k1);
-            int p1=int.parse(k1);
-            int p2=0;
-            int p3=0;
-            int p4=0;
-            int p5=0;
-            if(int.parse(k2) < 40000){
+            int p1 = int.parse(k1);
+            int p2 = 0;
+            int p3 = 0;
+            int p4 = 0;
+            int p5 = 0;
+            if (int.parse(k2) < 40000) {
               p2 = 1;
-            } else if(int.parse(k2) < 80000){
+            } else if (int.parse(k2) < 80000) {
               p2 = 2;
-            } else if(int.parse(k2) < 120000){
+            } else if (int.parse(k2) < 120000) {
               p2 = 3;
-            } else if(int.parse(k2) < 160000){
+            } else if (int.parse(k2) < 160000) {
               p2 = 4;
-            } else if(int.parse(k2) < 200000){
+            } else if (int.parse(k2) < 200000) {
               p2 = 5;
             }
-            
-            if(double.parse(k3) < 3){
+
+            if (double.parse(k3) < 3) {
               p3 = 1;
-            } else if(double.parse(k3) < 4.5){
+            } else if (double.parse(k3) < 4.5) {
               p3 = 2;
-            } else if(double.parse(k3) < 6){
+            } else if (double.parse(k3) < 6) {
               p3 = 3;
-            } else if(double.parse(k3) < 7.5){
+            } else if (double.parse(k3) < 7.5) {
               p3 = 4;
-            } else if(double.parse(k3) > 7.5){
+            } else if (double.parse(k3) > 7.5) {
               p3 = 5;
             }
 
-            if(int.parse(k4) >= 1500000){
+            if (int.parse(k4) >= 1500000) {
               p4 = 1;
-            } else if(int.parse(k4) < 1500000 && int.parse(k4) >= 750000){
+            } else if (int.parse(k4) < 1500000 && int.parse(k4) >= 750000) {
               p4 = 2;
-            } else if(int.parse(k4) < 750000 && int.parse(k4) >= 500000){
+            } else if (int.parse(k4) < 750000 && int.parse(k4) >= 500000) {
               p4 = 3;
-            } else if(int.parse(k4) < 500000 && int.parse(k4) >= 250000){
+            } else if (int.parse(k4) < 500000 && int.parse(k4) >= 250000) {
               p4 = 4;
-            } else if(int.parse(k4) < 250000){
+            } else if (int.parse(k4) < 250000) {
               p4 = 5;
             }
 
-             if(int.parse(k5) >= 100){
+            if (int.parse(k5) >= 100) {
               p5 = 1;
-            } else if(int.parse(k5) < 100 && int.parse(k5) >= 80){
+            } else if (int.parse(k5) < 100 && int.parse(k5) >= 80) {
               p5 = 2;
-            } else if(int.parse(k5) < 80 && int.parse(k5) >= 60){
+            } else if (int.parse(k5) < 80 && int.parse(k5) >= 60) {
               p5 = 3;
-            } else if(int.parse(k5) < 60 && int.parse(k5) >= 40){
+            } else if (int.parse(k5) < 60 && int.parse(k5) >= 40) {
               p5 = 4;
-            } else if(int.parse(k5) < 40){
+            } else if (int.parse(k5) < 40) {
               p5 = 5;
             }
 
-            QuerySnapshot getAlt = await firestore.collection("alternatif").orderBy("kode_alternatif").getDocuments();
-            List<String> kriteria = [k1.toString(),k2,k3,k4,k5];
-            List<int> prioritas =[int.parse(k1),p2,p3,p4,p5];
-            String kode = "A" + (getAlt.documents.length + 1).toString();
-            CollectionReference tasks = firestore.collection('alternatif');
-            DocumentReference result = await tasks.add(<String, dynamic>{
-              'kode_alternatif' : kode,
-              'kriteria' : kriteria,
-              'nama_alternatif' : name,
-              'preferensi' : 0,
-              'prioritas' : prioritas,
-              // 'name': name,
-              // //'description': description,
-              // 'date': date,
-            });
-            if (result.documentID != null) {
-              Navigator.pop(context, true);
+            QuerySnapshot getAlt = await firestore
+                .collection("alternatif")
+                .orderBy("kode_alternatif")
+                .getDocuments();
+            List<String> kriteria = [k1.toString(), k2, k3, k4, k5];
+            List<int> prioritas = [int.parse(k1), p2, p3, p4, p5];
+            int kode = getAlt.documents.length + 1;;
+            if(widget.isEdit == true){
+              kode = widget.index+1;
             }
-          }
-          // if (widget.isEdit) {
-          //   DocumentReference documentTask = firestore.document('tasks/${widget.documentId}');
-          //   firestore.runTransaction((transaction) async {
-          //     DocumentSnapshot task = await transaction.get(documentTask);
-          //     if (task.exists) {
-          //       await transaction.update(
-          //         documentTask,
-          //         <String, dynamic>{
-          //           'name': name,
-          //           'description': description,
-          //           'date': date,
-          //         },
-          //       );
-          //       Navigator.pop(context, true);
-          //     }
-          //   });
-          // } else {
-          //   CollectionReference tasks = firestore.collection('tasks');
-          //   DocumentReference result = await tasks.add(<String, dynamic>{
-          //     'name': name,
-          //     'description': description,
-          //     'date': date,
-          //   });
-          //   if (result.documentID != null) {
-          //     Navigator.pop(context, true);
-          //   }
-          //}
+            CollectionReference tasks = firestore.collection('alternatif');
+
+            await tasks
+                .document('Alternatif' + kode.toString())
+                .setData(<String, dynamic>{
+              'kode_alternatif': kode,
+              'kriteria': kriteria,
+              'nama_alternatif': name,
+              'preferensi': 0,
+              'prioritas': prioritas,
+            });
+            Navigator.pop(context, true);            
         },
       ),
     );

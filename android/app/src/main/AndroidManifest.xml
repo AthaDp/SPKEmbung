@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="spkembung2"
+        android:label="SPK Embung"
         android:icon="@drawable/group_162"
         android:usesCleartextTraffic="true"
         >
