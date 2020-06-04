@@ -35,14 +35,14 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
     _errorMessage = "";
     _isLoading = false;
     _isLoginForm = true;
-    getFire();
+    //getFire();
     super.initState();
   }
 
   Future getAlternatif() async {
     QuerySnapshot getAlt = await firestore
         .collection("alternatif")
-        .orderBy("kode_alternatif")
+        .orderBy("timestamp", descending: false)
         .getDocuments();
 
     return getAlt.documents;
@@ -51,15 +51,8 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
   Future getKriteria() async {
     QuerySnapshot getAlt = await firestore
         .collection("kriteria")
-        .orderBy("kode_kriteria")
+        .orderBy("id")
         .getDocuments();
-
-    return getAlt.documents;
-  }
-
-  Future getPreferensi() async {
-    QuerySnapshot getAlt =
-        await firestore.collection("preferensi").orderBy("id").getDocuments();
 
     return getAlt.documents;
   }
@@ -129,19 +122,8 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                       fontFamily: "Roboto")),
             ],
           ),
-          new Text(
-            "Perhitungan Data Normalisasi Dilakukan :",
-          ),
           new Divider(),
-          new Text(
-            "1. Apabila kriteria cost :",
-          ),
-          new Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-          ),
-          new Text(
-            "2. Apabila kriteria benefit :",
-          ),
+          Image.asset('assets/rumusNormalisasi.png',  height: 75,),
           new Padding(
             padding: const EdgeInsets.only(top: 16.0),
           ),
@@ -157,7 +139,7 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                   child: FutureBuilder(
                       //future: getPosts(),
                       future: Future.wait(
-                          [getAlternatif(), getKriteria(), getPreferensi()]),
+                          [getAlternatif(), getKriteria()]),
                       builder: (_, AsyncSnapshot<List> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
@@ -178,7 +160,7 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                               prioritas
                                   .add(snapshot.data[0][x]["prioritas"][a]);
                             }
-                            print("prioritas max " + prioritas.toString());
+                            //print("prioritas max " + prioritas.toString());
                             return prioritas.reduce(max);
                           }
 
@@ -187,13 +169,13 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                             int panjang =
                                 snapshot.data[0].length;
                             for (int x = 0; x < panjang; x++) {
-                              int isiPrioritas =
-                                  snapshot.data[0][x]["prioritas"][a];
+                              // int isiPrioritas =
+                              //     snapshot.data[0][x]["prioritas"][a];
                               prioritas
                                   .add(snapshot.data[0][x]["prioritas"][a]);
                             }
-                            maks = List.from(
-                                snapshot.data[1][a]["prioritasKriteria"]);
+                            // maks = List.from(
+                            //     snapshot.data[1][a]["prioritasKriteria"]);
                             return prioritas.reduce(min);
                           }
 

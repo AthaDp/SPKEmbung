@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 //import 'package:flutter_firestore_todo/app_color.dart';
 //import 'package:flutter_firestore_todo/widget_background.dart';
 //import 'package:intl/intl.dart';
@@ -15,8 +16,11 @@ class TambahAlternatif extends StatefulWidget {
   final String k2;
   final String k3;
   final String k4;
+  final String k5;
+  final String k6;
   final String k0;
   final int index;
+  final Timestamp timestamp;
 
   TambahAlternatif({
     @required this.isEdit,
@@ -28,9 +32,12 @@ class TambahAlternatif extends StatefulWidget {
     this.k2 = '',
     this.k3 = '',
     this.k4 = '',
+    this.k5 = '',
+    this.k6 = '',
     this.k0 = '',
     this.nama = '',
     this.index,
+    this.timestamp
   });
 
   @override
@@ -49,51 +56,47 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
   final TextEditingController controllerK2 = TextEditingController();
   final TextEditingController controllerK3 = TextEditingController();
   final TextEditingController controllerK4 = TextEditingController();
+  final TextEditingController controllerK5 = TextEditingController();
+  final TextEditingController controllerK6 = TextEditingController();
 
   double widthScreen;
   double heightScreen;
   DateTime date = DateTime.now().add(Duration(days: 1));
   bool isLoading = false;
 
-  // List<DropdownMenuItem<int>> listDrop = [];
-  // void loadData() {
-  //   listDrop.add(new DropdownMenuItem(
-  //     child: new Text("Hutan"),
-  //     value: 1,
-  //     ));
-  //   listDrop.add(new DropdownMenuItem(
-  //     child: new Text("Semak Belukar"),
-  //     value: 2,
-  //     ));
-  //   listDrop.add(new DropdownMenuItem(
-  //     child: new Text("Ladang / Tegalan"),
-  //     value: 3,
-  //     ));
-  //   listDrop.add(new DropdownMenuItem(
-  //     child: new Text("Tadah Hujan"),
-  //     value: 4,
-  //     ));
-  //   listDrop.add(new DropdownMenuItem(
-  //     child: new Text("Perkampungan"),
-  //     value: 5,
-  //     ));
-  // }
-
-  String _myList;
-  String _myListResult;
   int kriteria1;
+  int kriteria7;
   String alternatifValue;
+  String alternatifValue2;
 
   @override
   void initState() {
-    _myList = '';
-    _myListResult = '';
-    // loadData();
-    // print(listDrop);
     if (widget.isEdit) {
-      String k1 = "helloworld"; //prioritas K1
+      String k1 = "helloworld";
+      String k7 = "helloworld";
       controllerName.text = widget.nama;
-      //kriteria1 = 1; //angka
+
+      if(widget.k6 == "1"){
+        alternatifValue2 = "one";
+        k7 = "tersedia jalan aspal sampai site";
+        kriteria7= 1;
+      } else if(widget.k6 == "2"){
+          alternatifValue2 = "two";
+          k7 = "jalan makadam/tanah sampai site";
+          kriteria7 = 2;
+      } else if(widget.k6 == "3"){
+          alternatifValue2 = "three";
+          k7 = "jalan setapak";
+          kriteria7 = 3;
+      } else if(widget.k6 == "4"){
+          alternatifValue2 = "four";
+          k7 = "tidak tersedia jalan";
+          kriteria7 = 4;
+      } else {
+        alternatifValue2 = null;
+        k7 = null;
+      }
+
       if(widget.k0 == "1"){
         alternatifValue = "one";
         k1 = "Hutan";
@@ -117,13 +120,61 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
         alternatifValue = null;
         k1 = null;
       }
+
       controllerK1.text = widget.k1;
       controllerK2.text = widget.k2;
       controllerK3.text = widget.k3;
       controllerK4.text = widget.k4;
+      controllerK5.text = widget.k5;
+
+      
       //selectedDropDownValue = "normal";
     } 
     super.initState();
+  }
+
+  normalisasi() async {
+    List<int> prioritas = new List<int>();
+    List<double> content = [];
+    QuerySnapshot getAlt = await firestore
+        .collection("alternatif")
+        .orderBy("timestamp", descending: false)
+        .getDocuments();
+    QuerySnapshot getKri = await firestore
+        .collection("kriteria")
+        .orderBy("id")
+        .getDocuments();
+    int panjang = getAlt.documents.length;
+    int preferensi = 0;
+    for (int a = 0; a < 7; a++) {
+      for (int b = 0; b < panjang; b++) {
+        prioritas.add(getAlt.documents[b]["prioritas"][a]);
+      }
+      print("prioritas :" + prioritas.toString());
+      for (int c = 0; c < panjang; c++) {
+        if (getKri.documents[a]["keterangan"] == "Keuntungan") {
+          content.add(prioritas[c] / prioritas.reduce(max));
+        } else {
+          content.add(prioritas.reduce(min) / prioritas[c]);
+        }
+      }
+      print(content);
+      await firestore
+          .collection("preferensi")
+          .document("preferensi" + preferensi.toString())
+          .setData({
+        'preferensi': content,
+        'id': preferensi,
+      }, merge: true).then((documentReference) {
+        //print(documentReference.documentID);
+      }).catchError((e) {
+        print(e);
+      });
+      content.clear();
+      prioritas.clear();
+      preferensi++;
+    }
+    content.clear();
   }
 
   @override
@@ -139,7 +190,6 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            //WidgetBackground(),
             Container(
               width: widthScreen,
               height: heightScreen,
@@ -163,6 +213,8 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
                 ],
               ),
             ),
+              
+            
           ],
         ),
       ),
@@ -184,7 +236,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               color: Colors.grey[800],
             ),
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 12.0),
           Text(
             widget.isEdit ? 'Edit Alternatif' : 'Tambah Alternatif',
             style: Theme.of(context).textTheme.display1.merge(
@@ -205,8 +257,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
   }
 
   Widget _buildWidgetFormSecondary() {
-    return Expanded(
-      child: Container(
+    return Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -214,22 +265,10 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
             topRight: Radius.circular(24.0),
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
         child: Column(
           children: <Widget>[
-            // TextField(
-            //   controller: controllerK0,
-            //   decoration: InputDecoration(
-            //     labelText: 'K1',
-            //     suffixIcon: Column(
-            //       mainAxisAlignment: MainAxisAlignment.end,
-            //       children: <Widget>[
-            //         Icon(Icons.description),
-            //       ],
-            //     ),
-            //   ),
-            //   style: TextStyle(fontSize: 18.0),
-            // ),
+
             DropdownButtonFormField(
               hint: Text("Pilih Kategori Vegetasi"),
               value: alternatifValue,
@@ -273,6 +312,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               ],
             ),
             TextField(
+              keyboardType: TextInputType.number,
               controller: controllerK1,
               decoration: InputDecoration(
                 labelText: 'K2: Volume Material Timbunan',
@@ -286,6 +326,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               style: TextStyle(fontSize: 18.0),
             ),
             TextField(
+              keyboardType: TextInputType.number,
               controller: controllerK2,
               decoration: InputDecoration(
                 labelText: 'K3: Luas Daerah Yang Akan Dibebaskan',
@@ -299,6 +340,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               style: TextStyle(fontSize: 18.0),
             ),
             TextField(
+              keyboardType: TextInputType.number,
               controller: controllerK3,
               decoration: InputDecoration(
                 labelText: 'K4: Volume Tampungan Efektif',
@@ -312,6 +354,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               style: TextStyle(fontSize: 18.0),
             ),
             TextField(
+              keyboardType: TextInputType.number,
               controller: controllerK4,
               decoration: InputDecoration(
                 labelText: 'K5: Lama Operasi',
@@ -324,11 +367,63 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               ),
               style: TextStyle(fontSize: 18.0),
             ),
-
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: controllerK5,
+              decoration: InputDecoration(
+                labelText: 'K6: Harga air/m3',
+                suffixIcon: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Icon(Icons.description),
+                  ],
+                ),
+              ),
+              style: TextStyle(fontSize: 18.0),
+            ),
+            DropdownButtonFormField(
+              hint: Text("Pilih Akses Jalan Site"),
+              value: alternatifValue2,
+              onChanged: (String value2) {
+                if (value2 == 'one') {
+                  setState(() {
+                    kriteria7 = 1;
+                  });
+                }
+                if (value2 == 'two') {
+                  setState(() {
+                    kriteria7 = 2;
+                  });
+                }
+                if (value2 == 'three') {
+                  setState(() {
+                    kriteria7 = 3;
+                  });
+                }
+                if (value2 == 'four') {
+                  setState(() {
+                    kriteria7 = 4;
+                  });
+                }
+                if (value2 == 'five') {
+                  setState(() {
+                    kriteria7 = 5;
+                  });
+                }
+              },
+              items: [
+                DropdownMenuItem<String>(child: Text('tersedia jalan aspal sampai site'), value: 'one'),
+                DropdownMenuItem<String>(
+                    child: Text('jalan makadam/tanah sampai site'), value: 'two'),
+                DropdownMenuItem<String>(
+                    child: Text('jalan setapak'), value: 'three'),
+                DropdownMenuItem<String>(
+                    child: Text('tidak tersedia jalan'), value: 'four'),
+              ],
+            ),
             SizedBox(height: 16.0),      
           ],
         ),
-      ),
     );
   }
 
@@ -346,13 +441,17 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
           borderRadius: BorderRadius.circular(4.0),
         ),
         onPressed: () async {
+
+          
+
           String name = controllerName.text;
           String k1 = kriteria1.toString();
           String k2 = controllerK1.text;
           String k3 = controllerK2.text;
           String k4 = controllerK3.text;
           String k5 = controllerK4.text;
-          //String date = controllerDate.text;
+          String k6 = controllerK5.text;
+          String k7 = kriteria7.toString();
 
           if (name.isEmpty) {
             _showSnackBarMessage('Nama harus diisi!');
@@ -372,6 +471,12 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
           } else if (k5.isEmpty) {
             _showSnackBarMessage('Nilai Kriteria 5 harus diisi!');
             return;
+          } else if (k6.isEmpty) {
+            _showSnackBarMessage('Nilai Kriteria 6 harus diisi!');
+            return;
+          } else if (k7 == "null") {
+            _showSnackBarMessage('Nilai Kriteria 7 harus diisi!');
+            return;
           }
 
           setState(() => isLoading = true);
@@ -385,6 +490,8 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
             int p3 = 0;
             int p4 = 0;
             int p5 = 0;
+            int p6 = 0;
+
             if (int.parse(k2) < 40000) {
               p2 = 1;
             } else if (int.parse(k2) < 80000) {
@@ -433,28 +540,108 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               p5 = 5;
             }
 
-            QuerySnapshot getAlt = await firestore
+            if (int.parse(k6) < 10000) {
+              p6 = 1;
+            } else if (int.parse(k6) < 20000 && int.parse(k6) >= 10000) {
+              p6 = 2;
+            } else if (int.parse(k6) < 30000 && int.parse(k6) >= 20000) {
+              p6 = 3;
+            } else if (int.parse(k6) < 40000 && int.parse(k6) >= 30000) {
+              p6 = 4;
+            } else if (int.parse(k6) >= 40000) {
+              p6 = 5;
+            }
+
+            String n1;
+            if(k1 == "1"){
+              n1 = "Hutan";
+            } else if(k1 == "2"){
+              n1 = "Semak Belukar";
+            } else if(k1 == "3"){
+              n1 = "Ladang / Tegalan";
+            } else if(k1 == "4"){
+              n1 = "Tadah Hujan";
+            } else if(k1 == "5"){
+              n1 = "Perkampungan";
+            }
+
+            String n7;
+            if(k7 == "1"){
+              n7 = "Tersedia Jalan Aspal";
+            } else if(k7 == "2"){
+              n7 = "Jalan Makadam / Tanah";
+            } else if(k7 == "3"){
+              n7 = "Jalan Setapak";
+            } else if(k7 == "4"){
+              n7 = "Tidak Tersedia Jalan";
+            } 
+
+            if(widget.isEdit){
+              QuerySnapshot getAlt = await firestore
                 .collection("alternatif")
                 .orderBy("kode_alternatif")
                 .getDocuments();
-            List<String> kriteria = [k1.toString(), k2, k3, k4, k5];
-            List<int> prioritas = [int.parse(k1), p2, p3, p4, p5];
-            int kode = getAlt.documents.length + 1;;
-            if(widget.isEdit == true){
-              kode = widget.index+1;
+            List<String> kriteria = [n1.toString(), k2, k3, k4, k5,k6,n7.toString()];
+            List<int> prioritas = [int.parse(k1), p2, p3, p4, p5, p6, int.parse(k7)];
+            String kode = "empty";
+            if(getAlt.documents.length < 9){
+              kode = "00"+(getAlt.documents.length + 1).toString();
+            } else if(getAlt.documents.length >= 9){
+              kode = "0"+(getAlt.documents.length + 1).toString();
             }
+            // String alternate = 'Alternatif' + kode.toString();
+            // if(widget.isEdit == true){
+            //   alternate = widget.documentId;
+            // }
             CollectionReference tasks = firestore.collection('alternatif');
 
             await tasks
-                .document('Alternatif' + kode.toString())
+                .document(widget.documentId)
                 .setData(<String, dynamic>{
-              'kode_alternatif': kode,
+              //'kode_alternatif': kode,
               'kriteria': kriteria,
               'nama_alternatif': name,
               'preferensi': 0,
               'prioritas': prioritas,
+              'timestamp' : widget.timestamp
             });
-            Navigator.pop(context, true);            
+
+            normalisasi();
+            Navigator.pop(context, true);
+
+            } else {
+            QuerySnapshot getAlt = await firestore
+                .collection("alternatif")
+                .orderBy("kode_alternatif")
+                .getDocuments();
+            List<String> kriteria = [n1.toString(), k2, k3, k4, k5,k6,n7.toString()];
+            List<int> prioritas = [int.parse(k1), p2, p3, p4, p5, p6, int.parse(k7)];
+            String kode = "empty";
+            if(getAlt.documents.length < 9){
+              kode = "00"+(getAlt.documents.length + 1).toString();
+            } else if(getAlt.documents.length >= 9){
+              kode = "0"+(getAlt.documents.length + 1).toString();
+            }
+            // String alternate = 'Alternatif' + kode.toString();
+            // if(widget.isEdit == true){
+            //   alternate = widget.documentId;
+            // }
+            CollectionReference tasks = firestore.collection('alternatif');
+
+            await tasks
+                .document()
+                .setData(<String, dynamic>{
+              //'kode_alternatif': kode,
+              'kriteria': kriteria,
+              'nama_alternatif': name,
+              'preferensi': 0,
+              'prioritas': prioritas,
+              'timestamp' : Timestamp.now()
+            });
+
+            normalisasi();
+            Navigator.pop(context, true);
+            }            
         },
       ),
     );

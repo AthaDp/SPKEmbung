@@ -85,7 +85,7 @@ Future<String> loadMap() async {
 }
 
 Future<Locations> getGoogleOffices() async {
-  const googleLocationsURL = 'https://api.npoint.io/72acd9ee5d4a08d1899e';
+  const googleLocationsURL = 'https://api.npoint.io/d90b4afe47c4bed07a44';
 
   // Retrieve the locations of Google offices
   final response = await http.get(googleLocationsURL);

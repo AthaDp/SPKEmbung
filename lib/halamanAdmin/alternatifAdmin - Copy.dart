@@ -8,8 +8,8 @@ import 'dart:math';
 import 'package:spkembung2/halaman/detail_alternatif.dart';
 import 'package:spkembung2/halaman/tambahalternatif.dart';
 
-class AlternatifPage extends StatefulWidget {
-  AlternatifPage({Key key, this.auth, this.userId, this.logoutCallback})
+class AlternatifAdminPage extends StatefulWidget {
+  AlternatifAdminPage({Key key, this.auth, this.userId, this.logoutCallback})
       : super(key: key);
 
   final BaseAuth auth;
@@ -17,10 +17,10 @@ class AlternatifPage extends StatefulWidget {
   final String userId;
 
   @override
-  State<StatefulWidget> createState() => new _AlternatifPageState();
+  State<StatefulWidget> createState() => new _AlternatifAdminPageState();
 }
 
-class _AlternatifPageState extends State<AlternatifPage> {
+class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
   var firestore = Firestore.instance;
   final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -31,66 +31,23 @@ class _AlternatifPageState extends State<AlternatifPage> {
 
   @override
   void initState() {
-    //normalisasi();
+    normalisasi();
     // Future.delayed(const Duration(milliseconds: 500), () {
     //   preferensi();
     // });
     super.initState();
   }
 
-  // normalisasi() async {
-  //   List<int> prioritas = new List<int>();
-  //   List<double> content = [];
-  //   QuerySnapshot getAlt = await firestore
-  //       .collection("alternatif")
-  //       .orderBy("kode_alternatif")
-  //       .getDocuments();
-  //   QuerySnapshot getKri = await firestore
-  //       .collection("kriteria")
-  //       .orderBy("kode_kriteria")
-  //       .getDocuments();
-  //   int panjang = getAlt.documents.length;
-  //   int preferensi = 0;
-  //   for (int a = 0; a < getKri.documents.length; a++) {
-  //     for (int b = 0; b < panjang; b++) {
-  //       prioritas.add(getAlt.documents[b]["prioritas"][a]);
-  //     }
-  //     print("prioritas jelek:" + prioritas.toString());
-  //     for (int c = 0; c < panjang; c++) {
-  //       if (getKri.documents[a]["keterangan"] == "Keuntungan") {
-  //         content.add(prioritas[c] / prioritas.reduce(max));
-  //       } else {
-  //         content.add(prioritas.reduce(min) / prioritas[c]);
-  //       }
-  //     }
-  //     print(content);
-  //     await firestore
-  //         .collection("preferensi")
-  //         .document()
-  //         .setData({
-  //       'preferensi': content,
-  //       'id': preferensi,
-  //     }, merge: true).then((documentReference) {
-  //     }).catchError((e) {
-  //       print(e);
-  //     });
-  //     content.clear();
-  //     prioritas.clear();
-  //     preferensi++;
-  //   }
-  //   content.clear();
-  // }
-
   normalisasi() async {
     List<int> prioritas = new List<int>();
     List<double> content = [];
     QuerySnapshot getAlt = await firestore
         .collection("alternatif")
-        .orderBy("timestamp", descending: false)
+        .orderBy("kode_alternatif")
         .getDocuments();
     QuerySnapshot getKri = await firestore
         .collection("kriteria")
-        .orderBy("id")
+        .orderBy("kode_kriteria")
         .getDocuments();
     int panjang = getAlt.documents.length;
     int preferensi = 0;
@@ -180,14 +137,12 @@ class _AlternatifPageState extends State<AlternatifPage> {
     }
   }
 
-  
-
   Future getPosts() async {
     QuerySnapshot getAlt = await firestore
         .collection("alternatif")
         .orderBy("kode_alternatif")
         .getDocuments();
-    
+
     return getAlt.documents;
   }
 
@@ -198,6 +153,16 @@ class _AlternatifPageState extends State<AlternatifPage> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> addAlternatif() async {
+    await firestore.collection("alternatif").add({
+      'kode_alternatif': "tes1",
+    }).then((documentReference) {
+      print(documentReference.documentID);
+    }).catchError((e) {
+      print(e);
+    });
   }
 
   // NavigateToDetail(DocumentSnapshot post, int index) {
@@ -217,20 +182,6 @@ class _AlternatifPageState extends State<AlternatifPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   // onPressed: (){
-      //   //   normalisasi();
-      //   // },
-      //   onPressed: () async {
-      //     bool result = await Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => TambahAlternatif(isEdit: false)));
-      //     setState(() {});
-      //   },
-      //   tooltip: 'Tambah Kriteria Baru',
-      //   child: Icon(Icons.add),
-      // ),
       appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
       drawer: AppDrawer(),
       backgroundColor: Color(0xFF21BFBD),
@@ -242,7 +193,7 @@ class _AlternatifPageState extends State<AlternatifPage> {
             padding: EdgeInsets.only(left: 40.0),
             child: Row(
               children: <Widget>[
-                Text('Alternatif Admin',
+                Text('Alternatif',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         color: Colors.white,
@@ -262,8 +213,9 @@ class _AlternatifPageState extends State<AlternatifPage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(50.0)),
               ),
+              child: Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: firestore.collection('alternatif').orderBy("timestamp", descending: false).snapshots(),
+                  stream: firestore.collection('alternatif').snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (!snapshot.hasData) {
@@ -313,80 +265,77 @@ class _AlternatifPageState extends State<AlternatifPage> {
                                       ),
                                     )
                                   ]),
-                              // trailing: PopupMenuButton(
-                              //   itemBuilder: (BuildContext context) {
-                              //     return List<PopupMenuEntry<String>>()
-                              //       ..add(PopupMenuItem<String>(
-                              //         value: 'edit',
-                              //         child: Text('Edit'),
-                              //       ))
-                              //       ..add(PopupMenuItem<String>(
-                              //         value: 'delete',
-                              //         child: Text('Hapus'),
-                              //       ));
-                              //   },
-                              //   onSelected: (String value) async {
-                              //     if (value == 'edit') {
-                              //       bool result = await Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(builder: (context) {
-                              //           return TambahAlternatif(
-                              //             isEdit: true,
-                              //             documentId: document.documentID,
-                              //             index: index,
-                              //             nama: data["nama_alternatif"],
-                              //             k0: data["prioritas"][0]
-                              //                 .toString(),
-                              //             k1: data["kriteria"][1],
-                              //             k2: data["kriteria"][2],
-                              //             k3: data["kriteria"][3],
-                              //             k4: data["kriteria"][4],
-                              //             k5: data["kriteria"][5],
-                              //             k6: data["prioritas"][6].toString(),
-                              //             timestamp: data["timestamp"]
-                              //           );
-                              //         }),
-                              //       );
-                              //       setState(() {});
-                              //       normalisasi();
-                              //     } else if (value == 'delete') {
-                              //       showDialog(
-                              //         context: context,
-                              //         builder: (BuildContext context) {
-                              //           return AlertDialog(
-                              //             title: Text('Hapus Alternatif'),
-                              //             content: Text(
-                              //                 'Anda yakin ingin menghapus Alternatif ini?'),
-                              //             actions: <Widget>[
-                              //               FlatButton(
-                              //                 child: Text('Tidak'),
-                              //                 onPressed: () {
-                              //                   Navigator.pop(context);
-                              //                 },
-                              //               ),
-                              //               FlatButton(
-                              //                 child: Text('Hapus'),
-                              //                 onPressed: () {
-                              //                   document.reference.delete();
-                              //                   // firestore
-                              //                   //     .collection(
-                              //                   //         "alternatif")
-                              //                   //     .document("Alternatif" +
-                              //                   //         (index + 1)
-                              //                   //             .toString())
-                              //                   //     .delete();
-                              //                   Navigator.pop(context);
-                              //                   setState(() {});
-                              //                   normalisasi();
-                              //                 },
-                              //               ),
-                              //             ],
-                              //           );
-                              //         },
-                              //       );
-                              //     }
-                              //   },
-                              // ),
+                              trailing: PopupMenuButton(
+                                itemBuilder: (BuildContext context) {
+                                  return List<PopupMenuEntry<String>>()
+                                    ..add(PopupMenuItem<String>(
+                                      value: 'edit',
+                                      child: Text('Edit'),
+                                    ))
+                                    ..add(PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: Text('Hapus'),
+                                    ));
+                                },
+                                onSelected: (String value) async {
+                                  if (value == 'edit') {
+                                    bool result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return TambahAlternatif(
+                                          isEdit: true,
+                                          documentId: document.documentID,
+                                          index: index,
+                                          nama: data["nama_alternatif"],
+                                          k0: data["prioritas"][0]
+                                              .toString(),
+                                          k1: data["kriteria"][1],
+                                          k2: data["kriteria"][2],
+                                          k3: data["kriteria"][3],
+                                          k4: data["kriteria"][4],
+                                        );
+                                      }),
+                                    );
+                                    setState(() {});
+                                    normalisasi();
+                                  } else if (value == 'delete') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Hapus Alternatif'),
+                                          content: Text(
+                                              'Anda yakin ingin menghapus Alternatif ini?'),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text('Tidak'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            FlatButton(
+                                              child: Text('Hapus'),
+                                              onPressed: () {
+                                                document.reference.delete();
+                                                // firestore
+                                                //     .collection(
+                                                //         "alternatif")
+                                                //     .document("Alternatif" +
+                                                //         (index + 1)
+                                                //             .toString())
+                                                //     .delete();
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                                normalisasi();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                              ),
                               onTap: () => NavigateToDetail(
                                   document.data, index)
                             ),
@@ -530,10 +479,22 @@ class _AlternatifPageState extends State<AlternatifPage> {
               //             });
               //       }
               //     }))
-              
+              )
         ],
       ),
-      
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          bool result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TambahAlternatif(isEdit: false)));
+
+          normalisasi();
+          setState(() {});
+        },
+        tooltip: 'Tambah Kriteria Baru',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

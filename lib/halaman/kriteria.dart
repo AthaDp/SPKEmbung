@@ -71,7 +71,7 @@ class _HomePageState extends State<KriteriaPage> {
           ),
           // Expanded(child: null),
           Container(
-              height: MediaQuery.of(context).size.height - 100.0,
+              height: MediaQuery.of(context).size.height - 200.0,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(50.0)),

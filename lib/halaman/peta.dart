@@ -17,7 +17,12 @@ class PetaPage extends StatefulWidget {
 }
 
 class _PetaPageState extends State<PetaPage> {
+  BitmapDescriptor pinLocationIcon;
   final Map<String, Marker> _markers = {};
+
+  
+
+
   Future<void> _onMapCreated(GoogleMapController controller) async {
     final googleOffices = await locations.getGoogleOffices();
     setState(() {
@@ -26,6 +31,7 @@ class _PetaPageState extends State<PetaPage> {
         final marker = Marker(
           markerId: MarkerId(office.name),
           position: LatLng(office.lat, office.lng),
+          icon: pinLocationIcon,
           infoWindow: InfoWindow(
             title: office.name,
             snippet: office.address,
@@ -35,6 +41,17 @@ class _PetaPageState extends State<PetaPage> {
       }
     });
   }
+
+  void initState() {
+    super.initState();
+    setCustomMapPin();
+  }
+
+  void setCustomMapPin() async {
+      pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5),
+      'assets/iconEmbung.png');
+   }
 
   /*GoogleMapController mapController;
 
@@ -119,6 +136,7 @@ class _PetaPageState extends State<PetaPage> {
             ],
           ),
         ),
+        
         backgroundColor: Color(0xFF21BFBD),
         body: GoogleMap(
           onMapCreated: _onMapCreated,

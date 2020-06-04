@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:spkembung2/services/authentication.dart';
 import 'package:spkembung2/widgets/drawer.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:spkembung2/halaman/normalisasi.dart';
 import 'package:spkembung2/halaman/preferensi.dart';
@@ -72,6 +73,40 @@ class _HitungPageState extends State<HitungPage> {
             ),
           ),
         ));
+  }
+
+  Material _hitung(String title, AssetImage icon, String route, double radius) {
+    return Material(
+      color: Colors.white,
+      elevation: 12.0,
+      borderRadius: BorderRadius.only(topLeft: Radius.circular(radius)),
+      //borderRadius: BorderRadius.only(topLeft: Radius.circular(72)),
+      child: GestureDetector(
+        onTap: () async {
+          Navigator.pushNamed(context, route);
+        },
+      child :Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ImageIcon(
+                        icon,
+                        color: Color(0xFF21BFBD),
+                        size: 80,
+                      ),
+                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                ] 
+              )
+            ],
+          ),
+          ),
+      ),)
+    );
   }
 
   Card dashPreferensi(
@@ -161,16 +196,20 @@ class _HitungPageState extends State<HitungPage> {
               color: Colors.white,
               borderRadius: BorderRadius.only(topLeft: Radius.circular(75.0)),
             ),
-            child: GridView.count(
+            child: StaggeredGridView.count(
               crossAxisCount: 1,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 25,
               padding: EdgeInsets.only(left: 25.0, right: 20.0, top: 35),
               children: <Widget>[
                 //dashKriteria("Kriteria", Icons.book),
-                dashNormalisasi(
-                    "Normalisasi", AssetImage("assets/homeicons/Kriteria.png")),
-                dashPreferensi("Preferensi",
-                    AssetImage("assets/homeicons/Alternatif.png")),
+                _hitung("Normalisasi", AssetImage("assets/homeicons/Kriteria.png"), "normalisasi", 72.0),
+                _hitung("Preferensi", AssetImage("assets/homeicons/Alternatif.png"), "preferensi", 0),
               ],
+              staggeredTiles: [
+                  StaggeredTile.extent(2, 175.0),
+                  StaggeredTile.extent(2, 175.0),
+                ],
             ),
           )
         ],

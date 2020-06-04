@@ -33,7 +33,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
     _errorMessage = "";
     _isLoading = false;
     _isLoginForm = true;
-    getFire();
+    //getFire();
     super.initState();
   }
 
@@ -98,7 +98,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
   Future getAlternatif() async {
     QuerySnapshot getAlt = await firestore
         .collection("alternatif")
-        .orderBy("kode_alternatif")
+        .orderBy("timestamp", descending: false)
         .getDocuments();
 
     return getAlt.documents;
@@ -114,7 +114,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
   Future getKriteria() async {
     QuerySnapshot getAlt = await firestore
         .collection("kriteria")
-        .orderBy("kode_kriteria")
+        .orderBy("id")
         .getDocuments();
 
     return getAlt.documents;
@@ -151,14 +151,12 @@ class _PreferensiPageState extends State<PreferensiPage> {
             //)
           ),
           new Divider(),
-          new Text(
-            "TODO",
+          Image.asset('assets/rumusPreferensi.png',  height: 50,),
             //style: new TextStyle(fontSize:33.0,
             //color: const Color(0xFF21BFBD),
             //fontWeight: FontWeight.bold,
             //fontFamily: "Roboto"
             //)
-          ),
           new Divider(),
           new Expanded(
               child: Container(
@@ -179,20 +177,6 @@ class _PreferensiPageState extends State<PreferensiPage> {
                           var list = [for (var i = 0; i < 5; i += 1) i];
                           List<int> max = new List<int>();
 
-                          getmax(int a) {
-                            max = List.from(
-                                snapshot.data[1][a]["prioritasKriteria"]);
-                            max.sort();
-                            return max.last;
-                          }
-
-                          getmin(int a) {
-                            max = List.from(
-                                snapshot.data[1][a]["prioritasKriteria"]);
-                            max.sort();
-                            return max.first;
-                          }
-
                           return ListView.builder(
                               padding: const EdgeInsets.only(
                                   top: 20, bottom: 10, right: 10, left: 10),
@@ -205,8 +189,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
                                   child: ListTile(
                                       title: Text(
                                         "Preferensi A" +
-                                            snapshot.data[0][index]
-                                                .data["kode_alternatif"]
+                                            (index+1)
                                                 .toString() +
                                             ". " +
                                             snapshot.data[0][index]
