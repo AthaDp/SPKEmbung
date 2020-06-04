@@ -5,6 +5,7 @@ import 'dart:math';
 //import 'package:flutter_firestore_todo/widget_background.dart';
 //import 'package:intl/intl.dart';
 
+
 class TambahAlternatif extends StatefulWidget {
   final bool isEdit;
   final String documentId;
@@ -161,10 +162,12 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
       print(content);
       await firestore
           .collection("preferensi")
-          .document("preferensi" + preferensi.toString())
+          .document(preferensi < 10? "preferensi00"+ preferensi.toString() : "preferensi0"+ preferensi.toString() )
+          // .document("preferensi" + preferensi.toString())
           .setData({
+        'hitung' : [],
         'preferensi': content,
-        'id': preferensi,
+        'id': preferensi < 10? "00"+ preferensi.toString() : "0"+ preferensi.toString(),
       }, merge: true).then((documentReference) {
         //print(documentReference.documentID);
       }).catchError((e) {
@@ -638,8 +641,8 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               'prioritas': prioritas,
               'timestamp' : Timestamp.now()
             });
-
-            normalisasi();
+            
+            await normalisasi();
             Navigator.pop(context, true);
             }            
         },

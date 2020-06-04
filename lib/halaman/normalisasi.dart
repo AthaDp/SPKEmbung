@@ -182,7 +182,7 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
                           return ListView.builder(
                               padding: const EdgeInsets.only(
                                   top: 20, bottom: 10, right: 10, left: 10),
-                              itemCount: 5,
+                              itemCount: 7, //panjang Kriteria
                               itemBuilder: (_, index) {
                                 var keuntungan = [
                                   new Padding(

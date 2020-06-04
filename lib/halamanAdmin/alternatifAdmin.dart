@@ -94,7 +94,7 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
         .getDocuments();
     int panjang = getAlt.documents.length;
     int preferensi = 0;
-    for (int a = 0; a < 5; a++) {
+    for (int a = 0; a < 7; a++) {
       for (int b = 0; b < panjang; b++) {
         prioritas.add(getAlt.documents[b]["prioritas"][a]);
       }
@@ -109,10 +109,12 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
       print(content);
       await firestore
           .collection("preferensi")
-          .document("preferensi" + preferensi.toString())
+          .document(preferensi < 10? "preferensi00"+ preferensi.toString() : "preferensi0"+ preferensi.toString() )
+          // .document("preferensi" + preferensi.toString())
           .setData({
+        'hitung' : [],
         'preferensi': content,
-        'id': preferensi,
+        'id': preferensi < 10? "00"+ preferensi.toString() : "0"+ preferensi.toString(),
       }, merge: true).then((documentReference) {
         //print(documentReference.documentID);
       }).catchError((e) {
@@ -242,7 +244,7 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
             padding: EdgeInsets.only(left: 40.0),
             child: Row(
               children: <Widget>[
-                Text('Alternatif Admin',
+                Text('Alternatif',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         color: Colors.white,
@@ -348,7 +350,7 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
                                       }),
                                     );
                                     setState(() {});
-                                    normalisasi();
+                                    await normalisasi();
                                   } else if (value == 'delete') {
                                     showDialog(
                                       context: context,

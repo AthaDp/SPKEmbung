@@ -123,9 +123,10 @@ class _PeringkatPageState extends State<PeringkatPage> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                subtitle: Text(
-                                  data["nama_alternatif"] +
-                                      ", Nilai Preferensi: " +
+                                subtitle: 
+                                Text(
+                                  //data["nama_alternatif"] +
+                                      "Nilai Preferensi: " +
                                       data["preferensi"]
                                           .toString(),
                                 ),

@@ -73,9 +73,11 @@ class _HomePageAdminState extends State<HomePageAdmin> {
 
       await firestore
           .collection("preferensi")
-          .document("preferensi" + a.toString())
+          .document(a < 10? "preferensi00" + a.toString() : "preferensi0" + a.toString())
           .setData({
             'hitung': hasil,
+             'id' : a < 10? "00" + a.toString() : "0" + a.toString(),
+             //'preferensi' : []
           }, merge: true)
           .then((documentReference) {})
           .catchError((e) {
@@ -170,7 +172,7 @@ class _HomePageAdminState extends State<HomePageAdmin> {
         onTap: () async {
               await Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AlternatifAdminPage()));
-              preferensi();
+              await preferensi();
             },
       child :Center(
         child: Padding(
@@ -305,7 +307,7 @@ class _HomePageAdminState extends State<HomePageAdmin> {
               children: <Widget>[
                 //dashKriteria("Kriteria", Icons.book),
                 kriteria("Kriteria", AssetImage("assets/homeicons/Kriteria.png"), "kriteria"),
-                  alternatif("Alternatifs", AssetImage("assets/homeicons/Alternatif.png"), "alternatifAdmin"),
+                  alternatif("Alternatif", AssetImage("assets/homeicons/Alternatif.png"), "alternatifAdmin"),
                   _home("Hitung", AssetImage("assets/homeicons/Hitung.png"), "hitung"),
                   _home("Peringkat", AssetImage("assets/homeicons/Peringkat.png"), "peringkat"),  
                   _home("Peta", AssetImage("assets/homeicons/Peta.png"), "peta"),

@@ -174,7 +174,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
                         } else {
-                          var list = [for (var i = 0; i < 5; i += 1) i];
+                          var list = [for (var i = 0; i < 7; i += 1) i];
                           List<int> max = new List<int>();
 
                           return ListView.builder(
@@ -238,7 +238,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
                                                 // ),
                                               ],
                                             ),
-                                          //new Text(") = " + snapshot.data[2][index].data["hitung"].fold(0,(i,j) => i+j).toStringAsFixed(2)),
+                                          new Text(") = " + snapshot.data[2][index].data["hitung"].fold(0,(i,j) => i+j).toStringAsFixed(2)),
                                           new Divider(),
                                         ],
                                       ),

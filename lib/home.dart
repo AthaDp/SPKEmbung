@@ -251,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                   _home("Peringkat", AssetImage("assets/homeicons/Peringkat.png"), "peringkat"),  
                   _home("Peta", AssetImage("assets/homeicons/Peta.png"), "peta"),
                   _home("Tentang", AssetImage("assets/homeicons/Tentang.png"), "tentang"),    
-                  new Text("helloword")
+                  //new Text("helloword")
                 ],
                 staggeredTiles: [
                   StaggeredTile.extent(1, 175.0),
