@@ -244,7 +244,7 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
             padding: EdgeInsets.only(left: 40.0),
             child: Row(
               children: <Widget>[
-                Text('Alternatif',
+                Text('Alternatif Admin',
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         color: Colors.white,
