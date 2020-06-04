@@ -149,7 +149,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
     int preferensi = 0;
     for (int a = 0; a < 7; a++) {
       for (int b = 0; b < panjang; b++) {
-        prioritas.add(getAlt.documents[b]["prioritas"][a]);
+        prioritas.add((getAlt.documents[b]["prioritas"][a]));
       }
       print("prioritas :" + prioritas.toString());
       for (int c = 0; c < panjang; c++) {
@@ -495,15 +495,15 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
             int p5 = 0;
             int p6 = 0;
 
-            if (int.parse(k2) < 40000) {
+            if (double.parse(k2) < 40000) {
               p2 = 1;
-            } else if (int.parse(k2) < 80000) {
+            } else if (double.parse(k2) < 80000) {
               p2 = 2;
-            } else if (int.parse(k2) < 120000) {
+            } else if (double.parse(k2) < 120000) {
               p2 = 3;
-            } else if (int.parse(k2) < 160000) {
+            } else if (double.parse(k2) < 160000) {
               p2 = 4;
-            } else if (int.parse(k2) < 200000) {
+            } else if (double.parse(k2) < 200000) {
               p2 = 5;
             }
 
@@ -519,39 +519,39 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               p3 = 5;
             }
 
-            if (int.parse(k4) >= 1500000) {
+            if (double.parse(k4) >= 1500000) {
               p4 = 1;
-            } else if (int.parse(k4) < 1500000 && int.parse(k4) >= 750000) {
+            } else if (double.parse(k4) < 1500000 && double.parse(k4) >= 750000) {
               p4 = 2;
-            } else if (int.parse(k4) < 750000 && int.parse(k4) >= 500000) {
+            } else if (double.parse(k4) < 750000 && double.parse(k4) >= 500000) {
               p4 = 3;
-            } else if (int.parse(k4) < 500000 && int.parse(k4) >= 250000) {
+            } else if (double.parse(k4) < 500000 && double.parse(k4) >= 250000) {
               p4 = 4;
-            } else if (int.parse(k4) < 250000) {
+            } else if (double.parse(k4) < 250000) {
               p4 = 5;
             }
 
-            if (int.parse(k5) >= 100) {
+            if (double.parse(k5) >= 100) {
               p5 = 1;
-            } else if (int.parse(k5) < 100 && int.parse(k5) >= 80) {
+            } else if (double.parse(k5) < 100 && double.parse(k5) >= 80) {
               p5 = 2;
-            } else if (int.parse(k5) < 80 && int.parse(k5) >= 60) {
+            } else if (double.parse(k5) < 80 && double.parse(k5) >= 60) {
               p5 = 3;
-            } else if (int.parse(k5) < 60 && int.parse(k5) >= 40) {
+            } else if (double.parse(k5) < 60 && double.parse(k5) >= 40) {
               p5 = 4;
-            } else if (int.parse(k5) < 40) {
+            } else if (double.parse(k5) < 40) {
               p5 = 5;
             }
 
-            if (int.parse(k6) < 10000) {
+            if (double.parse(k6) < 10000) {
               p6 = 1;
-            } else if (int.parse(k6) < 20000 && int.parse(k6) >= 10000) {
+            } else if (double.parse(k6) < 20000 && double.parse(k6) >= 10000) {
               p6 = 2;
-            } else if (int.parse(k6) < 30000 && int.parse(k6) >= 20000) {
+            } else if (double.parse(k6) < 30000 && double.parse(k6) >= 20000) {
               p6 = 3;
-            } else if (int.parse(k6) < 40000 && int.parse(k6) >= 30000) {
+            } else if (double.parse(k6) < 40000 && double.parse(k6) >= 30000) {
               p6 = 4;
-            } else if (int.parse(k6) >= 40000) {
+            } else if (double.parse(k6) >= 40000) {
               p6 = 5;
             }
 
@@ -609,7 +609,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
               'timestamp' : widget.timestamp
             });
 
-            normalisasi();
+            await normalisasi();
             Navigator.pop(context, true);
 
             } else {
