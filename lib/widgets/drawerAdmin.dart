@@ -7,6 +7,7 @@ import 'package:spkembung2/halaman/Hitung.dart';
 import 'package:spkembung2/halaman/peta.dart';
 import 'package:spkembung2/halaman/tentang.dart';
 import 'package:spkembung2/root_page.dart';
+import 'package:spkembung2/halaman/peringkat.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -66,12 +67,12 @@ class AppDrawer extends StatelessWidget {
             icon: AssetImage("assets/homeicons/Hitung.png"),
             text: 'Hitung',
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AlternatifPage()))),
+                MaterialPageRoute(builder: (context) => HitungPage()))),
         _createDrawerItem(
             icon: AssetImage("assets/homeicons/Peringkat.png"),
             text: 'Peringkat',
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AlternatifPage()))),
+                MaterialPageRoute(builder: (context) => PeringkatPage()))),
         _createDrawerItem(
             icon: AssetImage("assets/homeicons/Peta.png"),
             text: 'Peta',
