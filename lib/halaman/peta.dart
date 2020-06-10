@@ -3,12 +3,7 @@ import 'package:spkembung2/services/authentication.dart';
 import 'package:spkembung2/halaman/kriteria.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spkembung2/widgets/drawer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:spkembung2/services/locations.dart' as locations;
-import 'package:rxdart/rxdart.dart';
-import 'package:location/location.dart';
-import 'dart:async';
 
 class PetaPage extends StatefulWidget {
   PetaPage({Key key, this.auth, this.userId, this.logoutCallback})
@@ -23,96 +18,41 @@ class PetaPage extends StatefulWidget {
 }
 
 class _PetaPageState extends State<PetaPage> {
-  Firestore firestore = Firestore.instance;
-  Geoflutterfire geo = Geoflutterfire();
-  Location location =  new Location();
-
-  BehaviorSubject<double> radius = BehaviorSubject.seeded(100);
-  Stream<dynamic> query;
-  StreamSubscription subscription;
-
   BitmapDescriptor pinLocationIcon;
-  GoogleMapController mapController;
   final Map<String, Marker> _markers = {};
+
+  
+
+
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    final googleOffices = await locations.getGoogleOffices();
+    setState(() {
+      _markers.clear();
+      for (final office in googleOffices.offices) {
+        final marker = Marker(
+          markerId: MarkerId(office.name),
+          position: LatLng(office.lat, office.lng),
+          icon: pinLocationIcon,
+          infoWindow: InfoWindow(
+            title: office.name,
+            snippet: office.address,
+          ),
+        );
+        _markers[office.name] = marker;
+      }
+    });
+  }
 
   void initState() {
     super.initState();
     setCustomMapPin();
   }
 
-  void _updateMarkers(List<DocumentSnapshot> documentList) {
-    print(documentList);
-    mapController.clearMarkers();
-    documentList.forEach((DocumentSnapshot document) {
-      GeoPoint pos = document.data['position']['geopoint'];
-      double distance = document.data['distance'];
-      var marker = MarkerOptions(
-        position: LatLng(pos.latitude, pos.longitude),
-        icon: pinLocationIcon,
-        infoWindowText: InfoWindowText('Magic Marker', '🍄🍄🍄'),
-      );
-      mapController.addMarker(marker);
-    });
-  }
-
-  Future<DocumentReference> _addGeoPoint() async {
-  var pos = await location.getLocation();
-  GeoFirePoint point = geo.point(latitude: pos.latitude, longitude: pos.longitude);
-  return firestore.collection('locations').add({ 
-    'position': point.data,
-    'name': 'Yay I can be queried!' 
-  });
-}
-  
-
-  _startQuery() async {
-    // var pos = await location.geoLocation();
-    // double lat = pos['latitude'];
-    // double lng = pos['longitude'];
-
-    var ref = firestore.collection('locations');
-    GeoFirePoint center = geo.point(latitude: -7.330621, longitude: 110.508048);
-
-    subscription = radius.switchMap((rad) {
-      return geo.collection(collectionRef: ref).within(
-            center: center,
-            radius: rad,
-            field: 'position',
-            strictMode: true,
-          );
-    }).listen(_updateMarkers);
-  }
-
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await locations.getGoogleOffices();
-    _startQuery();
-    setState(() {
-      mapController = controller;
-      // _markers.clear();
-      // for (final office in googleOffices.offices) {
-      //   final marker = Marker(
-      //     markerId: MarkerId(office.name),
-      //     position: LatLng(office.lat, office.lng),
-      //     icon: pinLocationIcon,
-      //     infoWindow: InfoWindow(
-      //       title: office.name,
-      //       snippet: office.address,
-      //     ),
-      //   );
-      //   _markers[office.name] = marker;
-      // }
-    });
-  }
-
   void setCustomMapPin() async {
-    pinLocationIcon = await BitmapDescriptor.fromAsset(
-        'assets/iconEmbung.png');
-  }
-
-  // void setCustomMapPin() async {
-  //   pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-  //       ImageConfiguration(devicePixelRatio: 2.5), 'assets/iconEmbung.png');
-  // }
+      pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5),
+      'assets/iconEmbung.png');
+   }
 
   /*GoogleMapController mapController;
 
@@ -131,54 +71,21 @@ class _PetaPageState extends State<PetaPage> {
     }
   }
 
-  _addMarker() {
-  var marker = MarkerOptions(
-    position: LatLng(-7.330621, 110.508048),
-    icon: BitmapDescriptor.defaultMarker,
-    infoWindowText: InfoWindowText('Magic Marker', '🍄🍄🍄')
-  );
-
-  mapController.addMarker(marker);
-}
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GoogleMap(
-          initialCameraPosition: CameraPosition(
-              target: const LatLng(-7.330621, 110.508048), zoom: 11),
+    return Scaffold(
+        appBar: new AppBar(
+            title: Text('Peta Embung'), elevation: 0.0, bottomOpacity: 0.0),
+        drawer: AppDrawer(),
+        
+        backgroundColor: Color(0xFF21BFBD),
+        body: GoogleMap(
           onMapCreated: _onMapCreated,
-          myLocationEnabled:
-              true, // Add little blue dot for device location, requires permission from user
-          mapType: MapType.hybrid,
-        ),
-        FlatButton(
-            child: Icon(Icons.pin_drop),
-            color: Colors.green,
-            onPressed: () => _addMarker()
-          )
-      ],
-    );
-    // return Scaffold(
-    //     appBar: new AppBar(
-    //         title: Text('Peta Embung'), elevation: 0.0, bottomOpacity: 0.0),
-    //     drawer: AppDrawer(),
-
-    //     backgroundColor: Color(0xFF21BFBD),
-    //     body: GoogleMap(
-    //       onMapCreated: _onMapCreated,
-    //       initialCameraPosition: CameraPosition(
-    //         target: const LatLng(-7.330621, 110.508048),
-    //         zoom: 11,
-    //       ),
-    //       markers: _markers.values.toSet(),
-    //     ));
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
+          initialCameraPosition: CameraPosition(
+            target: const LatLng(-7.330621, 110.508048),
+            zoom: 11,
+          ),
+          markers: _markers.values.toSet(),
+        ));
   }
 }
