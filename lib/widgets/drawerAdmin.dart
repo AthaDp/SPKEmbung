@@ -10,6 +10,8 @@ import 'package:spkembung2/root_page.dart';
 import 'package:spkembung2/halaman/peringkat.dart';
 
 class AppDrawer extends StatelessWidget {
+  
+  
   @override
   Widget build(BuildContext context) {
     Widget _createHeader() {
@@ -98,6 +100,7 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           title: Text('1.0'),
           onTap: () {
+            
             //EMPTY
           },
         )

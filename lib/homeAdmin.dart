@@ -202,8 +202,10 @@ class _HomePageAdminState extends State<HomePageAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
-      drawer: new Drawer(
-        child: new ListView(
+      drawer: 
+      new Drawer(
+        child: 
+        new ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
               decoration: new BoxDecoration(
@@ -306,7 +308,7 @@ class _HomePageAdminState extends State<HomePageAdmin> {
               // padding: EdgeInsets.only(left: 25.0, right: 20.0, top: 35),
               children: <Widget>[
                 //dashKriteria("Kriteria", Icons.book),
-                kriteria("Kriteria", AssetImage("assets/homeicons/Kriteria.png"), "kriteria"),
+                kriteria("Kriteria", AssetImage("assets/homeicons/Kriteria.png"), "kriteriaAdmin"),
                   alternatif("Alternatif", AssetImage("assets/homeicons/Alternatif.png"), "alternatifAdmin"),
                   _home("Hitung", AssetImage("assets/homeicons/Hitung.png"), "hitung"),
                   _home("Peringkat", AssetImage("assets/homeicons/Peringkat.png"), "peringkat"),  

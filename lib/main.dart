@@ -8,6 +8,7 @@ import 'package:spkembung2/halaman/preferensi.dart';
 import 'package:spkembung2/halaman/normalisasi.dart';
 import 'package:spkembung2/halaman/Alternatif.dart';
 import 'package:spkembung2/halamanAdmin/AlternatifAdmin.dart';
+import 'package:spkembung2/halamanAdmin/KriteriaAdmin.dart';
 import 'package:spkembung2/halaman/hitung.dart';
 import 'package:spkembung2/halaman/peta.dart';
 import 'package:spkembung2/halaman/tentang.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
         routes: {
           'kriteria' : (context)=> KriteriaPage(),
+          'kriteriaAdmin' : (context)=> KriteriaAdminPage(),
           'alternatif' : (context)=> AlternatifPage(),
           'alternatifAdmin' : (context)=> AlternatifAdminPage(),
           'hitung' : (context)=> HitungPage(),

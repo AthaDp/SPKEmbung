@@ -5,6 +5,8 @@ import 'package:spkembung2/services/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spkembung2/widgets/drawer.dart';
 
+import 'package:spkembung2/halaman/tambahKriteria.dart';
+
 class KriteriaPage extends StatefulWidget {
   KriteriaPage({Key key, this.auth, this.userId, this.logoutCallback})
       : super(key: key);
@@ -21,6 +23,24 @@ class _HomePageState extends State<KriteriaPage> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   var list;
   var random;
+  String keteranganKriteria;
+  String pilihan;
+
+  @override
+  void initState() {
+    
+    //getKriteria();
+    super.initState();
+  }
+
+  // Future getKriteria() async {
+  //   QuerySnapshot getAlt = await Firestore.instance
+  //       .collection("kriteria")
+  //       .orderBy("id")
+  //       .getDocuments();
+
+  //   return getAlt.documents;
+  // }
 
   signOut() async {
     try {
@@ -41,6 +61,8 @@ class _HomePageState extends State<KriteriaPage> {
 
     return null;
   }
+
+  TextEditingController bobotController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +135,109 @@ class _HomePageState extends State<KriteriaPage> {
                                   //alternatif["bobot_kriteria"].toString()
                                   ),
                           isThreeLine: false,
+                          // trailing: PopupMenuButton(
+                          //   itemBuilder: (BuildContext context) {
+                          //     return List<PopupMenuEntry<String>>()
+                          //       ..add(PopupMenuItem<String>(
+                          //         value: 'edit',
+                          //         child: Text('Edit'),
+                          //       ));
+                          //   },
+                          //   onSelected: (String value) async {
+                          //     bobotController.text = alternatif['bobot_kriteria'].toString();
+                          //     if(alternatif['keterangan'] == "Biaya"){
+                          //       keteranganKriteria = 'Biaya';
+                          //       pilihan = "Biaya";
+                          //     } else if (alternatif['keterangan'] == "Keuntungan"){
+                          //       keteranganKriteria = 'Keuntungan';
+                          //       pilihan = "Keuntungan";
+                          //     }
+                              
+                          //     if (value == 'edit') {
+                          //       showDialog(
+                          //         context: context,
+                          //         builder: (BuildContext context) {
+                          //           return AlertDialog(
+                          //             title: Text('Edit Kriteria'),
+                          //             content: Container(
+                          //               height: 150.0,
+                          //               width: 400.0,
+                          //               child: Column(
+                          //                 children: <Widget>[
+                          //                   TextField(
+                          //                     keyboardType:
+                          //                         TextInputType.number,
+                          //                     controller: bobotController,
+                          //                     decoration: InputDecoration(
+                          //                       labelText: 'Bobot',
+                          //                     ),
+                          //                     style: TextStyle(fontSize: 18.0),
+                          //                   ),
+                          //                   DropdownButtonFormField(
+                          //                     hint: Text("Keterangan Kriteria"),
+                          //                     value: keteranganKriteria,
+                          //                     onChanged: (String value) {
+                          //                       if (value == 'Keuntungan') {
+                          //                         setState(() {
+                          //                           pilihan = "Keuntungan";
+                          //                         });
+                          //                       }
+                          //                       if (value == 'Biaya') {
+                          //                         setState(() {
+                          //                           pilihan = "Biaya";
+                          //                         });
+                          //                       }
+                          //                     },
+                          //                     items: [
+                          //                       DropdownMenuItem<String>(
+                          //                           child: Text('Keuntungan'),
+                          //                           value: 'Keuntungan'),
+                          //                       DropdownMenuItem<String>(
+                          //                           child: Text('Biaya'),
+                          //                           value: 'Biaya'),
+                          //                     ],
+                          //                   )
+                          //                 ],
+                          //               ),
+                          //             ),
+                          //             actions: <Widget>[
+                          //               FlatButton(
+                          //                 child: Text('Batal'),
+                          //                 onPressed: () {
+                          //                   Navigator.pop(context);
+                          //                 },
+                          //               ),
+                          //               FlatButton(
+                          //                 child: Text('Ubah'),
+                          //                 onPressed: () async {
+                          //                   //print(pilihan);
+                          //                   CollectionReference tasks = Firestore.instance.collection('kriteria');
+                          //                   await tasks.document(document.documentID).updateData({
+                          //                     'bobot_kriteria' : double.parse(bobotController.text),
+                          //                     'keterangan' : pilihan,
+                          //                   });
+                                            
+                          //                   //print(keteranganKriteria);
+                          //                   //document.reference.delete();
+                          //                   // firestore
+                          //                   //     .collection(
+                          //                   //         "alternatif")
+                          //                   //     .document("Alternatif" +
+                          //                   //         (index + 1)
+                          //                   //             .toString())
+                          //                   //     .delete();
+                          //                   Navigator.pop(context);
+                          //                   setState(() {});
+                          //                   //normalisasi();
+                          //                 },
+                          //               ),
+                          //             ],
+                          //           );
+                          //         },
+                          //       );
+                          //     }
+                          //   },
+                          // ),
                           leading: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
