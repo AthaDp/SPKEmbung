@@ -59,11 +59,11 @@ class _HomePageAdminState extends State<HomePageAdmin> {
     }
     print("bobot : " + bobot.toString());
     for (int a = 0; a < panjang; a++) {
-        for(int b = 0; b < 5; b++){
+        for(int b = 0; b < iterate; b++){
           content.add(getPref.documents[b]["preferensi"][a]);
         }
         print("content =" + content.toString());
-        for (int c = 0; c < 5; c++) {
+        for (int c = 0; c < iterate; c++) {
           hasil.add(content[c] * bobot[c]);
         }
       content.clear();

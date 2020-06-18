@@ -67,6 +67,22 @@ class _HomePageState extends State<KriteriaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        // onPressed: (){
+        //   normalisasi();
+        // },
+        onPressed: 
+        () async {
+          // bool result = await Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => TambahAlternatif(isEdit: false)));
+          // setState(() {});
+        }
+        ,
+        tooltip: 'Tambah Kriteria Baru',
+        child: Icon(Icons.add),
+      ),
       appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
       drawer: AppDrawer(),
       backgroundColor: Color(0xFF21BFBD),

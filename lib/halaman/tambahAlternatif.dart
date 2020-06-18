@@ -22,6 +22,7 @@ class TambahAlternatif extends StatefulWidget {
   final String k0;
   final int index;
   final Timestamp timestamp;
+  final Map<String,dynamic> isi;
 
   TambahAlternatif({
     @required this.isEdit,
@@ -38,6 +39,7 @@ class TambahAlternatif extends StatefulWidget {
     this.k0 = '',
     this.nama = '',
     this.index,
+    this.isi,
     this.timestamp
   });
 
@@ -75,21 +77,23 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
     if (widget.isEdit) {
       String k1 = "helloworld";
       String k7 = "helloworld";
-      controllerName.text = widget.nama;
-
-      if(widget.k6 == "1"){
+      String k6 = widget.isi["prioritas"][6].toString();
+      String k0 = widget.isi["prioritas"][0].toString();
+      controllerName.text = widget.isi["nama_alternatif"];
+  
+      if(k6 == "1"){
         alternatifValue2 = "one";
         k7 = "tersedia jalan aspal sampai site";
         kriteria7= 1;
-      } else if(widget.k6 == "2"){
+      } else if(k6 == "2"){
           alternatifValue2 = "two";
           k7 = "jalan makadam/tanah sampai site";
           kriteria7 = 2;
-      } else if(widget.k6 == "3"){
+      } else if(k6 == "3"){
           alternatifValue2 = "three";
           k7 = "jalan setapak";
           kriteria7 = 3;
-      } else if(widget.k6 == "4"){
+      } else if(k6 == "4"){
           alternatifValue2 = "four";
           k7 = "tidak tersedia jalan";
           kriteria7 = 4;
@@ -98,22 +102,22 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
         k7 = null;
       }
 
-      if(widget.k0 == "1"){
+      if(k0 == "1"){
         alternatifValue = "one";
         k1 = "Hutan";
-      } else if(widget.k0 == "2"){
+      } else if(k0 == "2"){
           alternatifValue = "two";
           k1 = "Semak Belukar";
           kriteria1 = 1;
-      } else if(widget.k0 == "3"){
+      } else if(k0 == "3"){
           alternatifValue = "three";
           k1 = "Ladang / Tegalan";
           kriteria1 = 2;
-      } else if(widget.k0 == "4"){
+      } else if(k0 == "4"){
           alternatifValue = "four";
           k1 = "Sawah Tadah Hujan";
           kriteria1 = 3;
-      } else if(widget.k0 == "5"){
+      } else if(k0 == "5"){
           alternatifValue = "five";
           k1 = "Perkampungan";
           kriteria1 = 4;
@@ -123,10 +127,15 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
       }
 
       controllerK1.text = widget.k1;
-      controllerK2.text = widget.k2;
-      controllerK3.text = widget.k3;
-      controllerK4.text = widget.k4;
-      controllerK5.text = widget.k5;
+      // controllerK2.text = widget.k2;
+      // controllerK3.text = widget.k3;
+      // controllerK4.text = widget.k4;
+      // controllerK5.text = widget.k5;
+
+      controllerK2.text = widget.isi["kriteria"][2];
+      controllerK3.text = widget.isi["kriteria"][3];
+      controllerK4.text = widget.isi["kriteria"][4];
+      controllerK5.text = widget.isi["kriteria"][5];
 
       
       //selectedDropDownValue = "normal";

@@ -335,16 +335,17 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
                                         return TambahAlternatif(
                                           isEdit: true,
                                           documentId: document.documentID,
-                                          index: index,
-                                          nama: data["nama_alternatif"],
-                                          k0: data["prioritas"][0]
-                                              .toString(),
-                                          k1: data["kriteria"][1],
-                                          k2: data["kriteria"][2],
-                                          k3: data["kriteria"][3],
-                                          k4: data["kriteria"][4],
-                                          k5: data["kriteria"][5],
-                                          k6: data["prioritas"][6].toString(),
+                                          index: index, //pass as map
+                                          // nama: data["nama_alternatif"],
+                                          // k0: data["prioritas"][0]
+                                          //     .toString(),
+                                          // k1: data["kriteria"][1],
+                                          // k2: data["kriteria"][2], //aman
+                                          // k3: data["kriteria"][3], //aman
+                                          // k4: data["kriteria"][4], //aman
+                                          // k5: data["kriteria"][5], //aman
+                                          // k6: data["prioritas"][6].toString(),
+                                          isi: data,
                                           timestamp: data["timestamp"]
                                         );
                                       }),
