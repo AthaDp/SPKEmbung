@@ -30,9 +30,9 @@ class _TentangPageState extends State<TentangPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
+      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0, iconTheme: new IconThemeData(color: Colors.white),),
       drawer: AppDrawer(),
-      backgroundColor: Color(0xFF21BFBD),
+      backgroundColor: Color(0xFF38C0D0),
       body: ListView(
         children: <Widget>[
           Padding(

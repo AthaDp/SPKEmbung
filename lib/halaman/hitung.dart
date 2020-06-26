@@ -61,7 +61,7 @@ class _HitungPageState extends State<HitungPage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -96,10 +96,10 @@ class _HitungPageState extends State<HitungPage> {
                 children: <Widget>[
                   ImageIcon(
                         icon,
-                        color: Color(0xFF21BFBD),
+                        color: Color(0xFF38C0D0),
                         size: 80,
                       ),
-                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                  Text(title, style: TextStyle(color: Color(0xFF38C0D0), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
                 ] 
               )
             ],
@@ -137,7 +137,7 @@ class _HitungPageState extends State<HitungPage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -165,9 +165,9 @@ class _HitungPageState extends State<HitungPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
+     appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0, iconTheme: new IconThemeData(color: Colors.white),),
       drawer: AppDrawer(),
-      backgroundColor: Color(0xFF21BFBD),
+      backgroundColor: Color(0xFF38C0D0),
       body: ListView(
         children: <Widget>[
           Padding(padding: EdgeInsets.only(top: 2.0, left: 10.0)),

@@ -117,10 +117,10 @@ class _HomePageAdminState extends State<HomePageAdmin> {
                 children: <Widget>[
                   ImageIcon(
                         icon,
-                        color: Color(0xFF21BFBD),
+                        color: Color(0xFF38C0D0),
                         size: 80,
                       ),
-                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                  Text(title, style: TextStyle(color: Color(0xFF38C0D0), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
                 ] 
               )
             ],
@@ -150,10 +150,10 @@ class _HomePageAdminState extends State<HomePageAdmin> {
                 children: <Widget>[
                   ImageIcon(
                         icon,
-                        color: Color(0xFF21BFBD),
+                        color: Color(0xFF38C0D0),
                         size: 80,
                       ),
-                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                  Text(title, style: TextStyle(color: Color(0xFF38C0D0), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
                 ] 
               )
             ],
@@ -185,10 +185,10 @@ class _HomePageAdminState extends State<HomePageAdmin> {
                 children: <Widget>[
                   ImageIcon(
                         icon,
-                        color: Color(0xFF21BFBD),
+                        color: Color(0xFF38C0D0),
                         size: 80,
                       ),
-                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                  Text(title, style: TextStyle(color: Color(0xFF38C0D0), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
                 ] 
               )
             ],
@@ -201,7 +201,7 @@ class _HomePageAdminState extends State<HomePageAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
+      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0, iconTheme: new IconThemeData(color: Colors.white),),
       drawer: 
       new Drawer(
         child: 
@@ -217,32 +217,30 @@ class _HomePageAdminState extends State<HomePageAdmin> {
                 title: new Text("Kriteria"),
                 trailing: new Icon(Icons.arrow_right),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => KriteriaAdmin()),
-                  // );
-                  //Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Page("First Page")));
+                  Navigator.push(context,
+                MaterialPageRoute(builder: (context) => KriteriaPage()));
                 }),
             new ListTile(
                 title: new Text("Alternatif"),
                 trailing: new Icon(Icons.arrow_right),
                 onTap: () {
-                  Navigator.of(context).pop();
-                  //Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Page("Second Page")));
+                  Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AlternatifPage()));
                 }),
             new ListTile(
                 title: new Text("Hitung"),
                 trailing: new Icon(Icons.arrow_right),
                 onTap: () {
                   Navigator.of(context).pop();
-                  //Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Page("Second Page")));
+                 Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HitungPage()));
                 }),
             new ListTile(
                 title: new Text("Peringkat"),
                 trailing: new Icon(Icons.arrow_right),
                 onTap: () {
-                  Navigator.of(context).pop();
-                  //Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Page("Second Page")));
+                 Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PeringkatPage()));
                 }),
             new ListTile(
                 title: new Text("Peta"),
@@ -257,7 +255,8 @@ class _HomePageAdminState extends State<HomePageAdmin> {
             new ListTile(
               title: new Text("Tentang"),
               trailing: new Icon(Icons.arrow_right),
-              onTap: () => signOut(),
+              onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TentangPage())),
             ),
             new ListTile(
               title: new Text("Logout"),
@@ -267,7 +266,7 @@ class _HomePageAdminState extends State<HomePageAdmin> {
           ],
         ),
       ),
-      backgroundColor: Color(0xFF21BFBD),
+      backgroundColor: Color(0xFF38C0D0),
       body: ListView(
         children: <Widget>[
           Padding(

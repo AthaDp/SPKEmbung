@@ -48,7 +48,7 @@ class TambahKriteria extends StatefulWidget {
 class _TambahKriteriaState extends State<TambahKriteria> {
   final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   final Firestore firestore = Firestore.instance;
-  //final AppColor appColor = Color(0xFF21BFBD);
+  //final AppColor appColor = Color(0xFF38C0D0);
   final TextEditingController controllerName = TextEditingController();
 
   final TextEditingController controllerK0 = TextEditingController();
@@ -436,7 +436,7 @@ class _TambahKriteriaState extends State<TambahKriteria> {
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: RaisedButton(
-        color: Color(0xFF21BFBD),
+        color: Color(0xFF38C0D0),
         child:
             Text(widget.isEdit ? 'PERBARUI ALTERNATIF' : 'TAMBAH ALTERNATIF'),
         textColor: Colors.white,

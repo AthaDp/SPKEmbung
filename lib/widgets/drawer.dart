@@ -84,17 +84,17 @@ class AppDrawer extends StatelessWidget {
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => TentangPage()))),
         Divider(),
-        // _createDrawerItem(
-        //     icon: AssetImage("assets/homeicons/Tentang.png"),
-        //     text: 'Masuk Sebagai Admin',
-        //     onTap: () => Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //             builder: (context) => RootPage(
-        //                   auth: new Auth(),
-        //                 )))
-        //     //
-        //     ),
+        _createDrawerItem(
+            icon: AssetImage("assets/homeicons/Tentang.png"),
+            text: 'Masuk Sebagai Admin',
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RootPage(
+                          auth: new Auth(),
+                        )))
+            //
+            ),
         ListTile(
           title: Text('1.0'),
           onTap: () {

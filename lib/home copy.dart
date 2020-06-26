@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -209,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -294,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -336,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                     child: ImageIcon(
                   icon,
                   size: 120.0,
-                  color: Color(0xFF21BFBD),
+                  color: Color(0xFF38C0D0),
                 )),
                 //SizedBox(height: 20.0),
                 new Center(
@@ -354,8 +354,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
+      iconTheme: new IconThemeData(color: Colors.white),
       drawer: AppDrawer(),
-      backgroundColor: Color(0xFF21BFBD),
+      backgroundColor: Color(0xFF38C0D0),
       body: ListView(
         children: <Widget>[
           Padding(

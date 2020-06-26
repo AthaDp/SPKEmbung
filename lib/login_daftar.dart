@@ -212,7 +212,7 @@ class _LoginSignupPageState extends State<LoginDaftar> {
             elevation: 5.0,
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
-            color: Color(0xFF21BFBD),
+            color: Color(0xFF38C0D0),
             child: new Text(_isLoginForm ? 'Masuk' : 'Buat Akun Baru',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: validateAndSubmit,

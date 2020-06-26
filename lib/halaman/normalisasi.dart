@@ -117,7 +117,7 @@ class _NormalisasiPageState extends State<NormalisasiPage> {
               new Text("Data Normalisasi",
                   style: new TextStyle(
                       fontSize: 33.0,
-                      color: const Color(0xFF21BFBD),
+                      color: const Color(0xFF38C0D0),
                       fontWeight: FontWeight.bold,
                       fontFamily: "Roboto")),
             ],

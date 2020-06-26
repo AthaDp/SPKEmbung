@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+import 'package:spkembung2/services/authentication.dart';
+import 'package:spkembung2/halaman/kriteria.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:spkembung2/widgets/drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:spkembung2/services/locations.dart' as locations;
+
+class PetaPage extends StatefulWidget {
+  PetaPage({Key key, this.auth, this.userId, this.logoutCallback})
+      : super(key: key);
+
+  final BaseAuth auth;
+  final VoidCallback logoutCallback;
+  final String userId;
+
+  @override
+  State<StatefulWidget> createState() => new _PetaPageState();
+}
+
+class _PetaPageState extends State<PetaPage> {
+  BitmapDescriptor pinLocationIcon;
+  final Map<String, Marker> _markers = {};
+
+  bool mapToggle = false;
+  bool clientsToggle = false;
+  bool resetToggle = false;
+
+  var currentLocation;
+
+  var clients = [];
+
+  var currentClient;
+  var currentBearing;
+
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    final googleOffices = await locations.getGoogleOffices();
+    setState(() {
+      _markers.clear();
+      for (final office in googleOffices.offices) {
+        final marker = Marker(
+          markerId: MarkerId(office.name),
+          position: LatLng(office.lat, office.lng),
+          icon: pinLocationIcon,
+          infoWindow: InfoWindow(
+            title: office.name,
+            snippet: office.address,
+          ),
+        );
+        _markers[office.name] = marker;
+        print(marker);
+      }
+    });
+  }
+
+  void initState() {
+    super.initState();
+    setCustomMapPin();
+  }
+
+  void setCustomMapPin() async {
+      pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5),
+      'assets/iconEmbung.png');
+   }
+
+   populateClients() {
+    clients = [];
+    Firestore.instance.collection('locations').getDocuments().then((docs) {
+      if (docs.documents.isNotEmpty) {
+        setState(() {
+          clientsToggle = true;
+        });
+        for (int i = 0; i < docs.documents.length; ++i) {
+          clients.add(docs.documents[i].data);
+          initMarker(docs.documents[i].data);
+        }
+      }
+    });
+  }
+
+  initMarker(client) {
+    mapController.clearMarkers().then((val) {
+      mapController.addMarker(MarkerOptions(
+          position:
+              LatLng(client['location'].latitude, client['location'].longitude),
+          draggable: false,
+          infoWindowText: InfoWindowText(client['clientName'], 'Nice')));
+    });
+  }
+
+  /*GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(-7.333914, 110.503951);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }*/
+
+  signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.logoutCallback();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: new AppBar(
+            title: Text('Peta Embung'), elevation: 0.0, bottomOpacity: 0.0),
+        drawer: AppDrawer(),
+        
+        backgroundColor: Color(0xFF38C0D0),
+        body: GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: const LatLng(-7.330621, 110.508048),
+            zoom: 11,
+          ),
+          markers: _markers.values.toSet(),
+        ));
+  }
+}

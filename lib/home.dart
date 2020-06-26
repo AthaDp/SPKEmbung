@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'services/authentication.dart';
-import 'widgets/drawerAdmin.dart';
+import 'widgets/drawer.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //halaman
-import 'package:spkembung2/halaman/kriteria.dart';
-import 'package:spkembung2/halaman/peringkat.dart';
 import 'package:spkembung2/halaman/Alternatif.dart';
-import 'package:spkembung2/halaman/hitung.dart';
-import 'package:spkembung2/halaman/peta.dart';
-import 'package:spkembung2/halaman/tentang.dart';
-import 'package:spkembung2/root_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -116,10 +110,10 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   ImageIcon(
                         icon,
-                        color: Color(0xFF21BFBD),
+                        color: Color(0xFF38C0D0),
                         size: 80,
                       ),
-                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                  Text(title, style: TextStyle(color: Color(0xFF38C0D0), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
                 ] 
               )
             ],
@@ -149,10 +143,10 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   ImageIcon(
                         icon,
-                        color: Color(0xFF21BFBD),
+                        color: Color(0xFF38C0D0),
                         size: 80,
                       ),
-                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                  Text(title, style: TextStyle(color: Color(0xFF38C0D0), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
                 ] 
               )
             ],
@@ -184,10 +178,10 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   ImageIcon(
                         icon,
-                        color: Color(0xFF21BFBD),
+                        color: Color(0xFF38C0D0),
                         size: 80,
                       ),
-                  Text(title, style: TextStyle(color: Color(0xFF21BFBD), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
+                  Text(title, style: TextStyle(color: Color(0xFF38C0D0), fontSize: 20.0, fontWeight: FontWeight.bold)),                  
                 ] 
               )
             ],
@@ -200,9 +194,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
+        appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0, iconTheme: new IconThemeData(color: Colors.white),),
         drawer: AppDrawer(),
-        backgroundColor: Color(0xFF21BFBD),
+        backgroundColor: Color(0xFF38C0D0),
         body: ListView(
           children: <Widget>[
             Padding(

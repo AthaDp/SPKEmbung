@@ -165,7 +165,7 @@ class _PetaPageState extends State<PetaPage> {
     //         title: Text('Peta Embung'), elevation: 0.0, bottomOpacity: 0.0),
     //     drawer: AppDrawer(),
 
-    //     backgroundColor: Color(0xFF21BFBD),
+    //     backgroundColor: Color(0xFF38C0D0),
     //     body: GoogleMap(
     //       onMapCreated: _onMapCreated,
     //       initialCameraPosition: CameraPosition(

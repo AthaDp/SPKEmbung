@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         title: 'SPK Embung',
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
-          primaryColor: Color(0xFF21BFBD),
+          primaryColor: Color(0xFF38C0D0),
         ),
         home: new HomePage());
     //home: new RootPage(auth: new Auth()));

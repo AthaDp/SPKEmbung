@@ -137,7 +137,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
               new Text("Data Preferensi",
                   style: new TextStyle(
                       fontSize: 33.0,
-                      color: const Color(0xFF21BFBD),
+                      color: const Color(0xFF38C0D0),
                       fontWeight: FontWeight.bold,
                       fontFamily: "Roboto")),
             ],
@@ -145,7 +145,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
           new Text(
             "Perhitungan data Preferensi dilakukan\n dengan rumus :",
             //style: new TextStyle(fontSize:33.0,
-            //color: const Color(0xFF21BFBD),
+            //color: const Color(0xFF38C0D0),
             //fontWeight: FontWeight.bold,
             //fontFamily: "Roboto"
             //)
@@ -153,7 +153,7 @@ class _PreferensiPageState extends State<PreferensiPage> {
           new Divider(),
           Image.asset('assets/rumusPreferensi.png',  height: 50,),
             //style: new TextStyle(fontSize:33.0,
-            //color: const Color(0xFF21BFBD),
+            //color: const Color(0xFF38C0D0),
             //fontWeight: FontWeight.bold,
             //fontFamily: "Roboto"
             //)

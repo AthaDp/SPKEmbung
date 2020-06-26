@@ -86,9 +86,9 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0),
+      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0, iconTheme: new IconThemeData(color: Colors.white),),
       //drawer: AppDrawer(),
-      backgroundColor: Color(0xFF21BFBD),
+      backgroundColor: Color(0xFF38C0D0),
       body: ListView(
         children: <Widget>[
           Padding(padding: EdgeInsets.only(top: 2.0, left: 10.0)),
@@ -166,7 +166,7 @@ class _DetailAlternatifState extends State<DetailAlternatif> {
                                   width: 40.0,
                                   height: 40.0,
                                   decoration: BoxDecoration(
-                                    color: Color(0xFF21BFBD),
+                                    color: Color(0xFF38C0D0),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
