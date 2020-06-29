@@ -126,12 +126,7 @@ class _TambahAlternatifState extends State<TambahAlternatif> {
         k1 = null;
       }
 
-      controllerK1.text = widget.k1;
-      // controllerK2.text = widget.k2;
-      // controllerK3.text = widget.k3;
-      // controllerK4.text = widget.k4;
-      // controllerK5.text = widget.k5;
-
+      controllerK1.text = widget.isi["kriteria"][1];
       controllerK2.text = widget.isi["kriteria"][2];
       controllerK3.text = widget.isi["kriteria"][3];
       controllerK4.text = widget.isi["kriteria"][4];

@@ -127,7 +127,7 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
           .collection("alternatif")
           .document("Alternatif" + (a + 1).toString())
           .setData({
-            'preferensi': hasil.fold(0, (i, j) => i + j).toStringAsFixed(2),
+            'preferensi': hasil.fold(0, (i, j) => i + j),
           }, merge: true)
           .then((documentReference) {})
           .catchError((e) {
@@ -182,6 +182,19 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          bool result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TambahAlternatif(isEdit: false)));
+
+          normalisasi();
+          setState(() {});
+        },
+        tooltip: 'Tambah Kriteria Baru',
+        child: Icon(Icons.add),
+      ),
       appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0, iconTheme: new IconThemeData(color: Colors.white),),
       drawer: AppDrawer(),
       backgroundColor: Color(0xFF38C0D0),
@@ -482,19 +495,7 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
               )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          bool result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TambahAlternatif(isEdit: false)));
-
-          normalisasi();
-          setState(() {});
-        },
-        tooltip: 'Tambah Kriteria Baru',
-        child: Icon(Icons.add),
-      ),
+      
     );
   }
 }

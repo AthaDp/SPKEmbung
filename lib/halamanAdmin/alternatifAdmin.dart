@@ -172,7 +172,7 @@ class _AlternatifAdminPageState extends State<AlternatifAdminPage> {
           .collection("alternatif")
           .document("Alternatif" + (a + 1).toString())
           .setData({
-            'preferensi': hasil.fold(0, (i, j) => i + j).toStringAsFixed(2),
+            'preferensi': hasil.fold(0, (i, j) => i + j),
           }, merge: true)
           .then((documentReference) {})
           .catchError((e) {

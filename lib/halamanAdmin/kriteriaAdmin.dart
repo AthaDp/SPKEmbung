@@ -21,6 +21,7 @@ class KriteriaAdminPage extends StatefulWidget {
 
 class _HomePageState extends State<KriteriaAdminPage> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+  int flag = 0;
   var list;
   var random;
   String keteranganKriteria;
@@ -28,8 +29,9 @@ class _HomePageState extends State<KriteriaAdminPage> {
 
   @override
   void initState() {
-    
     //getKriteria();
+    print("flag");
+    print(flag);
     super.initState();
   }
 
@@ -51,6 +53,35 @@ class _HomePageState extends State<KriteriaAdminPage> {
     }
   }
 
+  Widget showErrorMessage(int a) {
+    print("errpr");
+    print(a);
+    if(a == 1){
+      return new Text(
+        "Nilai Total Bobot Melebihi 1!",
+        style: TextStyle(
+            fontSize: 14.0,
+            color: Colors.red,
+            height: 1.0,
+            fontWeight: FontWeight.w300),
+      );
+    } else if(a == 2) {
+     return new Text(
+        "Nilai Total Bobot Dibawah 0!",
+        style: TextStyle(
+            fontSize: 14.0,
+            color: Colors.red,
+            height: 1.0,
+            fontWeight: FontWeight.w300),
+      );
+    } else {
+       return new Container(
+        height: 0.0,
+      );
+    }
+      
+  }
+
   Future<Null> refreshList() async {
     refreshKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
@@ -67,7 +98,11 @@ class _HomePageState extends State<KriteriaAdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(elevation: 0.0, bottomOpacity: 0.0, iconTheme: new IconThemeData(color: Colors.white),),
+      appBar: new AppBar(
+        elevation: 0.0,
+        bottomOpacity: 0.0,
+        iconTheme: new IconThemeData(color: Colors.white),
+      ),
       drawer: AppDrawer(),
       backgroundColor: Color(0xFF38C0D0),
       body: ListView(
@@ -144,20 +179,25 @@ class _HomePageState extends State<KriteriaAdminPage> {
                                 ));
                             },
                             onSelected: (String value) async {
-                              bobotController.text = alternatif['bobot_kriteria'].toString();
-                              if(alternatif['keterangan'] == "Biaya"){
+                              flag = 0;
+                              bobotController.text =
+                                  alternatif['bobot_kriteria'].toString();
+                              if (alternatif['keterangan'] == "Biaya") {
                                 keteranganKriteria = 'Biaya';
                                 pilihan = "Biaya";
-                              } else if (alternatif['keterangan'] == "Keuntungan"){
+                              } else if (alternatif['keterangan'] ==
+                                  "Keuntungan") {
                                 keteranganKriteria = 'Keuntungan';
                                 pilihan = "Keuntungan";
                               }
-                              
+
                               if (value == 'edit') {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AlertDialog(
+                                    return StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return AlertDialog(
                                       title: Text('Edit Kriteria'),
                                       content: Container(
                                         height: 150.0,
@@ -196,7 +236,11 @@ class _HomePageState extends State<KriteriaAdminPage> {
                                                     child: Text('Biaya'),
                                                     value: 'Biaya'),
                                               ],
-                                            )
+                                            ),
+                                            Container(
+                                              height: 25.0,
+                                            ),
+                                              showErrorMessage(flag),
                                           ],
                                         ),
                                       ),
@@ -211,12 +255,57 @@ class _HomePageState extends State<KriteriaAdminPage> {
                                           child: Text('Ubah'),
                                           onPressed: () async {
                                             //print(pilihan);
-                                            CollectionReference tasks = Firestore.instance.collection('kriteria');
-                                            await tasks.document(document.documentID).updateData({
-                                              'bobot_kriteria' : double.parse(bobotController.text),
-                                              'keterangan' : pilihan,
-                                            });
+                                            //List<double> bobotSum = new List<double>();
+                                            QuerySnapshot getKri =
+                                                await Firestore.instance
+                                                    .collection("kriteria")
+                                                    .orderBy("kode_kriteria")
+                                                    .getDocuments();
+                                            List<double> bobotSum = [];
+                                            for (int a = 0;
+                                                a < getKri.documents.length;
+                                                a++) {
+                                              double bobot = getKri.documents[a]
+                                                  .data['bobot_kriteria'];
+                                              bobotSum.add(bobot);
+                                            }
+                                            //print(bobotSum.toString());
+                                            double sum = bobotSum.fold(
+                                                0,
+                                                (previous, current) =>
+                                                    previous + current);
+                                            print(alternatif["bobot_kriteria"]
+                                                .toString());
+                                            sum = sum -
+                                                alternatif["bobot_kriteria"];
+                                            sum = sum +
+                                                double.parse(
+                                                    bobotController.text);
+                                                    print(flag);
+                                                    
+                                            //print(sum.toString());
+
+                                            if (sum < 1 && sum >= 0) {
+                                              CollectionReference tasks =
+                                                  Firestore.instance
+                                                      .collection('kriteria');
+                                              await tasks
+                                                  .document(document.documentID)
+                                                  .updateData({
+                                                'bobot_kriteria': double.parse(
+                                                    bobotController.text),
+                                                'keterangan': pilihan,
+                                              });
+                                              setState(() {});
+                                              Navigator.pop(context);
                                             
+                                            //normalisasi();
+                                            } else if(sum <0){
+                                              setState(() {flag =2;});
+                                            } else {
+                                              setState(() {flag =1;});
+                                            }
+
                                             //print(keteranganKriteria);
                                             //document.reference.delete();
                                             // firestore
@@ -226,13 +315,16 @@ class _HomePageState extends State<KriteriaAdminPage> {
                                             //         (index + 1)
                                             //             .toString())
                                             //     .delete();
-                                            Navigator.pop(context);
-                                            setState(() {});
+                                            //Navigator.pop(context);
+                                            
                                             //normalisasi();
                                           },
                                         ),
                                       ],
                                     );
+                                      }
+                                    );
+                                    
                                   },
                                 );
                               }

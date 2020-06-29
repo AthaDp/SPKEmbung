@@ -128,7 +128,7 @@ class _PeringkatPageState extends State<PeringkatPage> {
                                   //data["nama_alternatif"] +
                                       "Nilai Preferensi: " +
                                       data["preferensi"]
-                                          .toString(),
+                                          .toStringAsFixed(5),
                                 ),
                                 isThreeLine: false,
                                 leading: Column(

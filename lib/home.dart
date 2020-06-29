@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
           .collection("alternatif")
           .document(getAlt.documents[a].documentID)
           .setData({
-            'preferensi': hasil.fold(0, (i, j) => i + j).toStringAsFixed(2),
+            'preferensi': hasil.fold(0, (i, j) => i + j),
           }, merge: true)
           .then((documentReference) {})
           .catchError((e) {

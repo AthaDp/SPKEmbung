@@ -37,63 +37,6 @@ class _PreferensiPageState extends State<PreferensiPage> {
     super.initState();
   }
 
-  getFire() async {
-    List<double> content = [];
-    List<double> contentPref = [];
-    List<double> bobot = [];
-    List<double> hasil = [];
-    QuerySnapshot getKri = await firestore
-        .collection("kriteria")
-        .orderBy("kode_kriteria")
-        .getDocuments();
-    QuerySnapshot getAlt = await firestore
-        .collection("alternatif")
-        .orderBy("kode_alternatif")
-        .getDocuments();
-    QuerySnapshot getPref =
-        await firestore
-        .collection("preferensi")
-        .orderBy("id")
-        .getDocuments();
-    int panjang = getAlt.documents.length; //panjang Kriteria
-    int iterate = 5;
-    for (int v = 0; v < 5; v++) {
-      bobot.add((getKri.documents[v].data["bobot_kriteria"]).toDouble());
-    }
-    print("bobot : " + bobot.toString());
-    for (int a = 0; a < panjang; a++) {
-        for(int b = 0; b < iterate; b++){
-          content.add(getPref.documents[b]["preferensi"][a]);
-        }
-        for (int c = 0; c < 5; c++) {
-          hasil.add(content[c] * bobot[c]);
-        }
-      content.clear();
-      contentPref.clear();
-
-      await firestore
-          .collection("preferensi")
-          .document("preferensi" + a.toString())
-          .setData({
-            'hitung': hasil,
-          }, merge: true)
-          .then((documentReference) {})
-          .catchError((e) {
-            print(e);
-          });
-      await firestore
-          .collection("alternatif")
-          .document("Alternatif" + (a + 1).toString())
-          .setData({
-            'preferensi': hasil.fold(0, (i, j) => i + j).toStringAsFixed(2),
-          }, merge: true)
-          .then((documentReference) {})
-          .catchError((e) {
-            print(e);
-          });
-      hasil.clear();
-    }
-  }
 
   Future getAlternatif() async {
     QuerySnapshot getAlt = await firestore
